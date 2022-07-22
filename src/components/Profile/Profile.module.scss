@@ -1,0 +1,54 @@
+@import '../../BaseStyles/Variables.module.scss';
+@import '../../BaseStyles/Mixins.module.scss';
+
+.Profile {
+  @include cardDesign;
+  justify-content: flex-start;
+}
+
+.Profile__Photo {
+  border-radius: 30px; 
+  margin-right: 20px;
+}
+
+.Profile__ShortInfo {
+  h2 {
+    margin-bottom: 10px;
+  }
+  p {
+    margin-top: 10px;
+  }
+}
+
+.Profile__Header,
+.Profile__Job,
+.Profile__Info {
+  display: flex;
+}
+
+.Profile__Wrapper {
+  flex-grow: 1;
+}
+
+.Profile__ShortInfo,
+.Profile__Job,
+.Profile__About,
+.Profile__Contacts {
+  width: calc((100% - 20px)/2);
+}
+
+.Profile__ShortInfo,
+.Profile__About {
+  margin-right: 20px;
+}
+
+.Profile__JobIcon {
+  width: 75px;
+  height: 75px;
+}
+
+s.Profile__About {
+  h4 {
+    margin-top: 0;
+  }
+}

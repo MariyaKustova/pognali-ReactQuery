@@ -1,0 +1,17 @@
+@import '../../BaseStyles/Variables.module.scss';
+@import '../../BaseStyles/Mixins.module.scss';
+
+.Header {   
+  position: sticky;
+  top: 0;
+  background-color: $dark-blue-grey;
+  border-bottom-left-radius: 40px;
+  border-bottom-right-radius: 40px;
+  margin-bottom: 20px;
+  z-index: 1;
+}
+
+.Header__Wrapper {
+  @include wrapper;
+  padding: 40px 0 10px;
+}

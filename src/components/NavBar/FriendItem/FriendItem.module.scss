@@ -1,0 +1,17 @@
+@import '../../../BaseStyles/Fonts.module.scss';
+@import '../../../BaseStyles/Variables.module.scss';
+
+.FriendItem__name {
+  font-size: 24px;
+  line-height: 36px;
+  font-family: "BloggerSans";
+
+  &::before {
+     content: '';
+     display: block;
+     width: 15px;
+     height: 15px;
+     background-color: $light-gold;
+     border-radius: 50%;
+  }
+}

@@ -1,0 +1,6 @@
+@import '../../../BaseStyles/Variables.module.scss';
+@import '../../../BaseStyles/Mixins.module.scss';
+
+.MyPosts {
+ @include list-reset;
+}

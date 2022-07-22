@@ -1,0 +1,44 @@
+@import '../../BaseStyles/Mixins.module.scss';
+@import '../../BaseStyles/Variables.module.scss';
+
+.UserItem {
+  @include cardDesign;
+}
+
+.UserItem__ShortInfo {
+  display: flex;
+  align-items: center;
+}
+
+.UserItem__Wrapper {
+  display: flex;
+  flex-direction: column;
+  margin-right: 20px;
+  padding-bottom: 24px;
+  position: relative;
+}
+
+.UserItem__Img {
+  width: 75px;
+  height: 75px;
+  border-radius: 50%; 
+}
+
+.UserItem__Button {
+  position: absolute;
+  top: 65px;
+  right: -10px;
+}
+
+.UserItem__Name {
+  margin-top: 12px;
+  @include medium-text();
+}
+
+.UserItem__Text {
+  margin: 12px 0;
+}
+
+.UserItem__Location {
+  min-width: 150px;
+}

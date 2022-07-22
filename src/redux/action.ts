@@ -1,0 +1,13 @@
+export const SET_NEW_POST = 'SET_NEW_POST';
+export const UPDATE_POST_TEXT = 'UPDATE_POST_TEXT';
+export const SET_USER_PROFILE = 'SET_USER_PROFILE';
+
+export const SET_NEW_MESSAGE = 'SET_NEW_MESSAGE';
+export const UPDATE_MESSAGE_TEXT = 'UPDATE_MESSAGE_TEXT';
+
+export const FOLLOW = 'FOLLOW';
+export const UNFOLLOW = 'UNFOLLOW';
+export const SET_USERS = 'SET_USERS';
+export const SET_TOTAL_COUNT_PAGES = 'SET_TOTAL_COUNT_PAGES';
+export const SET_CURRENT_PAGE = 'SET_CURRENT_PAGE';
+export const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING';

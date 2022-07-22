@@ -1,0 +1,15 @@
+@import '../../BaseStyles/Mixins.module.scss';
+@import '../../BaseStyles/variables.module.scss';
+
+.Dialogs__Wrapper {
+  display: grid;
+  grid-template-columns: 2fr 10fr;
+}
+
+.Dialogs__List {
+  @include list-reset;
+
+  li {
+    margin-bottom: 10px;
+  }
+}
