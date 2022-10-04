@@ -1,12 +1,28 @@
-import React from "react";
+import React, { FC } from "react";
 import classnames from "classnames";
 
-import s from './Button.module.scss';
+import s from "./Button.module.scss";
 
-const Button = (props: any) => {
-  return (
-    <button className={classnames(s.Button, props.className)} onClick={props.onClick}>{props.label}</button>
-  )
+interface ButtonProps {
+  className?: string;
+  label: string;
+  type? : "button" | "submit" | "reset" | undefined;
+  onClick?: (e: any) => void;
+  disabled?: boolean;
 }
+
+const Button: FC<ButtonProps> = (props) => {
+  const { className, onClick, disabled, label, type } = props;
+  return (
+    <button
+      className={classnames(s.Button, className)}
+      onClick={onClick}
+      disabled={disabled}
+      type={type || 'button'}
+    >
+      {label}
+    </button>
+  );
+};
 
 export default Button;

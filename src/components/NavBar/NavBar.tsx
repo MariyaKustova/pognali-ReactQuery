@@ -1,11 +1,16 @@
-import React from "react";
+import React, { FC } from "react";
 import { NavLink } from "react-router-dom";
 import { ROUTE_PATH } from "../../constants";
 import FriendItem from "./FriendItem/FriendItem";
+import { Friend } from "./types";
 
 import s from "./NavBar.module.scss";
 
-const NavBar = (props: any) => {
+interface NavBarProps {
+  friends: Friend[];
+}
+
+const NavBar: FC<NavBarProps> = ({friends}) => {
   return (
     <nav className={s.NavBar}>
       <ul>
@@ -80,7 +85,7 @@ const NavBar = (props: any) => {
               Friends
             </NavLink>
             <div className={s.NavBar__Wrapper}>
-              {props.state.friends.map((friend: any) => (
+              {friends.map((friend) => (
                 <FriendItem key={friend.id} name={friend.name} />
               ))}
             </div>

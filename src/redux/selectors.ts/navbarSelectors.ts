@@ -1,0 +1,1 @@
+export const getNavbarFriends = (state: any) => state.navbar.friends;

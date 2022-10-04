@@ -1,4 +1,10 @@
-const initialState = {
+import { Friend } from "../../components/NavBar/types";
+
+export interface NavbarState {
+  friends: Friend[];
+}
+
+const initialState: NavbarState = {
   friends: [
     {
       id: "1",
@@ -13,7 +19,7 @@ const initialState = {
       name: "Alex",
     },
   ],
-}
+};
 
 const navbarReducer = (state = initialState, action: any) => state;
 

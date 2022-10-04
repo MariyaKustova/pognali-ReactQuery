@@ -7,16 +7,20 @@
 }
 
 .Profile__Photo {
+  width: 300px;
+  height: 300px;
   border-radius: 30px; 
   margin-right: 20px;
 }
 
 .Profile__ShortInfo {
   h2 {
-    margin-bottom: 10px;
+    margin-bottom: 5px;
   }
   p {
-    margin-top: 10px;
+    @include small-text;
+    margin-top: 5px;
+    margin-bottom: 0;
   }
 }
 
@@ -28,6 +32,7 @@
 
 .Profile__Wrapper {
   flex-grow: 1;
+  min-height: 300px;
 }
 
 .Profile__ShortInfo,
@@ -35,6 +40,7 @@
 .Profile__About,
 .Profile__Contacts {
   width: calc((100% - 20px)/2);
+  min-height: 150px;
 }
 
 .Profile__ShortInfo,
@@ -47,8 +53,28 @@
   height: 75px;
 }
 
-s.Profile__About {
+.Profile__About {
   h4 {
     margin-top: 0;
+    margin-bottom: 5px
+  }
+
+  p {
+    margin: 0
+  }
+}
+
+.Profile__Contacts {
+  display: flex;
+  justify-content: flex-end;
+
+  ul {
+    @include list-reset ;
+    display: flex;
+    margin-top: auto;
+
+    li:not(:last-child) {
+      margin-right: 7px;
+    }
   }
 }

@@ -1,7 +1,7 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 
-import { ROUTE_PATH } from "../../../constants";
+import { ROUTE_PATH } from "../../../../constants";
 
 import s from "./DialogItem.module.scss";
 

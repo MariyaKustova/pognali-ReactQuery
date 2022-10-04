@@ -1,7 +1,7 @@
 @import '../../BaseStyles/Variables.module.scss';
 @import '../../BaseStyles/Mixins.module.scss';
 
-.Header {   
+.Header {
   position: sticky;
   top: 0;
   background-color: $dark-blue-grey;
@@ -13,5 +13,49 @@
 
 .Header__Wrapper {
   @include wrapper;
-  padding: 40px 0 10px;
+  padding: 40px 30px 10px;
+  display: flex;
+  justify-content: space-between;
+
+  .Header__Text,
+  a {
+    @include link;
+    font-size: 24px;
+    color: $white;
+
+    &:hover,
+    &:focus {
+      color: $mango;
+    }
+  }
+}
+
+.Header__Login {
+  display: flex;
+  align-items: center;
+}
+
+.Header__Img {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin-right: 5px;
+}
+
+.Header__rightContent {
+  display: flex;
+  align-items: center;
+}
+
+.Header__btnLogout {
+  @include light-text;
+  color: $white;
+  background-color: transparent;
+  border: none;
+  margin-right: 15px;
+
+  &:hover,
+  &:focus {
+    color: $mango;
+  }
 }

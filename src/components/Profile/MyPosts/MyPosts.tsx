@@ -1,27 +1,27 @@
 import React, { Fragment } from "react";
-import Post from "./Post/Post";
-import TextArea from "../../TextArea/TextArea";
+import Post from "./components/Post/Post";
+import PostForm from "./components/PostForm/PostForm";
 
 import s from "./MyPosts.module.scss";
 
-const MyPosts = (props: any) => {  
-  const { posts, newPostText, addPost, updatePostText } = props;
-  
-  const onAddPost = () => {
-    addPost();
+const MyPosts = (props: any) => {
+  const { posts, addPost } = props;
+
+  const onSubmit = (values: {newPost: string}) => {    
+    values.newPost.length && addPost(values.newPost);
   };
 
-  const onChange = (e: any) => {
-    const text = e.target.value;
-    updatePostText(text);
-  }
-  
   return (
-    <Fragment>      
-      <img src="" alt="" />
-      <TextArea onChange={onChange} onClick={onAddPost} value={newPostText} />
+    <Fragment>
+      <PostForm onSubmit={onSubmit} />
       <ul className={s.MyPosts}>
-        {posts.map((post: any, index: any) => <Post key={index} message={post.message} countLikes={post.countLikes}/>)}
+        {posts.map((post: any, index: any) => (
+          <Post
+            key={index}
+            message={post.message}
+            countLikes={post.countLikes}
+          />
+        ))}
       </ul>
     </Fragment>
   );

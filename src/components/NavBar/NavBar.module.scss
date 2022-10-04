@@ -1,19 +1,13 @@
 @import '../../BaseStyles/Variables.module.scss';
-
-@mixin link {
-  font-size: 36px;
-  line-height: 40px;
-  font-family: "BloggerSans-Medium";
-  text-decoration: none;
-  color: $dark-blue-grey;
-}
+@import '../../BaseStyles/Mixins.module.scss';
 
 .NavBar {
   grid-area: nav;
   padding: 30px;
   background-color: $mango;
   border-radius: 40px;
-  height: calc(100vh - 100px);
+  height: calc(100vh - 144px);
+  margin-left: 30px;
 
   ul {
     list-style: none;
@@ -30,12 +24,14 @@
   }
 }
 
-.NavBar__Link {
-  @include link;
+.NavBar__Link, 
+.NavBar__ActiveLink {
+  @include link;  
+  font-family: "BloggerSans-Medium";
+  color: $dark-blue-grey;
 }
 
 .NavBar__ActiveLink {
-  @include link;
   text-decoration: underline;
 }
 

@@ -6,10 +6,9 @@
   grid-template-areas: "nav content";
   grid-template-columns: 3fr 9fr;
   @include wrapper;
-  margin: 0 auto;
 }
 
 .App__Content {
   grid-area: content;
-  padding: 30px;
+  padding: 0 30px 30px;
 }

@@ -17,12 +17,34 @@ export interface UserProfile {
   fullName: string;
   contacts: UserContacts;
   photos: {
-    small: string,
-    large: string,
-  },
+    small: string;
+    large: string;
+  };
 }
 
-export interface ProfileContainerProps {
-  userProfile: UserProfile,
-  setUserProfile: (profile: any) => void,  
+export interface UserStatus {
+  status: string;
+  updateUserStatus: (status: string) => void;
+}
+
+export type ProfileProps = UserProfile & UserStatus;
+
+export interface RouterProps {
+  location: {
+    hash: string;
+    key: string;
+    pathname: string;
+    search: string;
+    state: string | null;
+  };
+  navigate: (path: string) => void;
+  params: {
+    [key: string]: string;
+  };
+}
+
+export interface Post {
+  id: string;
+  message: string;
+  countLikes: number;
 }

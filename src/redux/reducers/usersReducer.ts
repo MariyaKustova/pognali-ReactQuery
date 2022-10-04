@@ -1,14 +1,31 @@
-import { UsersState } from "../../components/Users/types";
-import { FOLLOW, UNFOLLOW, SET_USERS, SET_TOTAL_COUNT_PAGES, SET_CURRENT_PAGE, TOGGLE_IS_FETCHING } from "../action";
+import { User } from "../../components/Users/types";
+import {
+  FOLLOW,
+  UNFOLLOW,
+  SET_USERS,
+  SET_TOTAL_COUNT_PAGES,
+  SET_CURRENT_PAGE,
+  TOGGLE_IS_FETCHING,
+  TOGGLE_IS_FOLLOWING,
+} from "../action";
+
+export interface UsersState {
+  users: User[];
+  totalCount: number;
+  currentPage: number;
+  isFetching: boolean;
+  followingInProgress: number[];
+}
 
 const initialState: UsersState = {
   users: [],
   totalCount: 0,
   currentPage: 1,
   isFetching: false,
+  followingInProgress: [],
 };
 
-const profileReducer = (state = initialState, action: any) => {
+const usersReducer = (state = initialState, action: any) => {
   switch (action.type) {
     case FOLLOW: {
       return {
@@ -62,16 +79,28 @@ const profileReducer = (state = initialState, action: any) => {
       };
     }
 
+    case TOGGLE_IS_FOLLOWING: {
+      const { isFetching, userId } = action.payload;
+      return {
+        ...state,
+        followingInProgress: isFetching
+          ? [...state.followingInProgress, userId]
+          : state.followingInProgress.filter((id) => id !== userId),
+      };
+    }
+
     default:
       return state;
   }
 };
 
-export const follow = (userId: string) => ({
+// ActionCreator
+
+export const followSuccess = (userId: number) => ({
   type: FOLLOW,
   payload: userId,
 });
-export const unfollow = (userId: string) => ({
+export const unfollowSuccess = (userId: number) => ({
   type: UNFOLLOW,
   payload: userId,
 });
@@ -91,5 +120,9 @@ export const toggleIsFetching = (isFetching: boolean) => ({
   type: TOGGLE_IS_FETCHING,
   payload: isFetching,
 });
+export const toggleIsFollowing = (isFetching: boolean, userId: number) => ({
+  type: TOGGLE_IS_FOLLOWING,
+  payload: {isFetching, userId},
+});
 
-export default profileReducer;
+export default usersReducer;

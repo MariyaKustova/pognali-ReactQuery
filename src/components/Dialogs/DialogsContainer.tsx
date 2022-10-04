@@ -1,23 +1,19 @@
 import { connect } from "react-redux";
+import { compose } from "redux";
 
 import Dialogs from "./Dialogs";
-import {
-  setNewMessageActionCreator,
-  updateMessageTextActionCreator,
-} from "../../redux/reducers/dialogsReducer";
-
+import { setNewMessage } from "../../redux/reducers/dialogsReducer";
+import { withProtectedRoute } from "../../helpers/withProtectedRoute/withProtectedRoute";
+import { getDialogsData, getMessagesData } from "../../redux/selectors.ts/dialogsSelectors";
 
 const mapStateToProps = (state: any) => ({
-  dialogsData: state.dialogs.dialogsData,
-  messagesData: state.dialogs.messagesData,
-  newMessage: state.dialogs.newMessage,
-})
+  dialogsData: getDialogsData(state),
+  messagesData: getMessagesData(state),
+});
 
-const mapDispatchToProps = (dispatch: any) => ({
-  addMessage: () => dispatch(setNewMessageActionCreator()),
-  updateMessage: (message: string) => dispatch(updateMessageTextActionCreator(message)),
-})
-
-const DialogsContainer = connect(mapStateToProps, mapDispatchToProps)(Dialogs);
-
-export default DialogsContainer;
+export default compose(
+  connect(mapStateToProps, {
+    setNewMessage,
+  }),
+  withProtectedRoute
+)(Dialogs);

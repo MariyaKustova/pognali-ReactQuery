@@ -6,15 +6,27 @@
   padding: 0;
 }
 
+@mixin link {
+  font-size: 30px;
+  line-height: 40px;
+  text-decoration: none;
+}
+
 @mixin wrapper {
-  width: $desktop-width;
   margin: 0 auto;
+  max-width: $desktop-width;
 }
 
 @mixin light-text {
   font-family: "BloggerSans-Light";
   font-size: 24px;
   line-height: 30px;
+}
+
+@mixin small-text {
+  font-family: "BloggerSans-Light";
+  font-size: 14px;
+  line-height: 20px;
 }
 
 @mixin medium-text {
@@ -26,10 +38,10 @@
 @mixin cardDesign {
   display: flex;
   justify-content: space-between;
-  background-color: $dark-blue-grey;
+  background-color: $dark-blue-grey-70;
   padding: 15px;
   margin-bottom: 15px;
   border-radius: 30px;
-  @include light-text();
+  @include light-text();  
   color: $light-gold;
 }

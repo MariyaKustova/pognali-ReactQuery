@@ -3,6 +3,14 @@
 
 .UserItem {
   @include cardDesign;
+
+  &:hover {
+    background-color: $dark-blue-grey;
+
+    .UserItem__Name {
+      text-decoration: underline;
+    }
+  }
 }
 
 .UserItem__ShortInfo {
@@ -41,4 +49,10 @@
 
 .UserItem__Location {
   min-width: 150px;
+}
+
+.UserItem__Link {
+  color: $light-gold;
+  text-decoration: none;  
+  width: 100%;
 }

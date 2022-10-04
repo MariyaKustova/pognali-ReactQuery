@@ -9,6 +9,7 @@ export const ROUTE_PATH = {
   SETTINGS: '/settings',
   FRIENDS: '/friends',
   USERS: '/users',
+  LOGIN: '/login',
 }
 
 export const HASH_STAR = '/*';

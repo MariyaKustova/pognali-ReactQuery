@@ -1,21 +1,25 @@
-import React from "react";
+import React, { FC } from "react";
 
-import DialogItem from "./DialogItem/DialogItem";
-import MessageItem from "./MessageItem/MessageItem";
-import TextArea from "../TextArea/TextArea";
+import DialogItem from "./components/DialogItem/DialogItem";
+import MessageItem from "./components/MessageItem/MessageItem";
+import { Dialog, Message } from "./types";
+import DialogForm from "./components/DialogForm/DialogForm";
 
 import s from "./Dialogs.module.scss";
 
-const Dialogs = (props: any) => {
-  const { dialogsData, messagesData, newMessage, addMessage, updateMessage } = props;
+interface DialogsProps {
+  dialogsData: Dialog[];
+  messagesData: Message[];
+  setNewMessage: (newMessage: string) => void;
+}
 
-  const onAddMessage = () => {
-    addMessage();
-  };
-
-  const onChangeMessage = (e: any) => {
-    const message = e.target.value;
-    updateMessage(message);
+const Dialogs: FC<DialogsProps> = ({
+  dialogsData,
+  messagesData,
+  setNewMessage,
+}) => {
+  const onSubmit = (values: {newMessage: string}) => {
+    values.newMessage.length && setNewMessage(values.newMessage);
   };
 
   return (
@@ -31,15 +35,10 @@ const Dialogs = (props: any) => {
             {messagesData.map((message: any, index: any) => (
               <MessageItem key={index} message={message.message} />
             ))}
-          </ul>
-          <TextArea
-            onChange={onChangeMessage}
-            value={newMessage}
-            onClick={onAddMessage}
-            placeholder="Add new message"
-          />
+          </ul>          
         </div>
       </div>
+      <DialogForm onSubmit={onSubmit} />
     </div>
   );
 };

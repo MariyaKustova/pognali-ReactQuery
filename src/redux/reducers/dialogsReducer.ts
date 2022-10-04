@@ -1,6 +1,11 @@
-import { SET_NEW_MESSAGE, UPDATE_MESSAGE_TEXT } from "../action";
+import { SET_NEW_MESSAGE } from "../action";
 
-const initialState = {
+export interface DialogsState {
+  dialogsData: { id: string, name: string }[];
+  messagesData: { id: string, message: string }[];
+}
+
+const initialState: DialogsState = {
   dialogsData: [
     {
       id: "1",
@@ -53,7 +58,6 @@ const initialState = {
       message: "Rrrr...",
     },
   ],
-  newMessage: "",
 };
 
 const dialogsReducer = (state = initialState, action: any) => {
@@ -61,32 +65,23 @@ const dialogsReducer = (state = initialState, action: any) => {
     case SET_NEW_MESSAGE: {
       const newMessage = {
         id: "7",
-        message: state.newMessage,
+        message: action.payload,
       };
 
-      return { 
+      return {
         ...state,
         messagesData: [...state.messagesData, newMessage],
-        newMessage: "",
       };
     }
 
-    case UPDATE_MESSAGE_TEXT: {
-      return { 
-        ...state,
-        newMessage: action.payload,
-      };
-    }
-    
-    default:      
+    default:
       return state;
   }
 };
 
-export const setNewMessageActionCreator = () => ({ type: SET_NEW_MESSAGE });
-export const updateMessageTextActionCreator = (text: string) => ({
-  type: UPDATE_MESSAGE_TEXT,
-  payload: text,
+export const setNewMessage = (newMessage: string) => ({
+  type: SET_NEW_MESSAGE,
+  payload: newMessage,
 });
 
 export default dialogsReducer;

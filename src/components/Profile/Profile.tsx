@@ -1,30 +1,48 @@
-import React from "react";
+import React, { FC } from "react";
 import _ from "lodash";
 
-import { UserProfile } from "./types";
+import { ProfileProps } from "./types";
 import MyPostsContainer from "./MyPosts/MyPostsContainer";
-import SmartLink from "../common/SmartLink/SmartLink";
+import SmartLink from "../common/SmartImgLink/SmartImgLink";
+import ProfileStatus from "./components/ProfileStatus/ProfileStatus";
+import { getIcon } from "./helpers";
+import IconUser from "../../assets/images/user-icon.svg";
 
 import s from "./Profile.module.scss";
 
+const Profile: FC<ProfileProps> = (props) => {
+  const {
+    userId,
+    aboutMe,
+    lookingForAJob,
+    lookingForAJobDescription,
+    fullName,
+    contacts,
+    photos,
+    status,
+    updateUserStatus,
+  } = props;
 
-const Profile = (props: UserProfile) => {
   return (
     <>
       {!_.isEmpty(props) && (
         <div className={s.Profile}>
           <img
             className={s.Profile__Photo}
-            src={props.photos.large}
+            src={photos.large || IconUser}
             alt="Фотография пользователя"
           />
           <div className={s.Profile__Wrapper}>
             <div className={s.Profile__Header}>
               <div className={s.Profile__ShortInfo}>
-                <h2>{props.fullName || "Здесь будет имя пользователя"}</h2>
-                <p>id: {props.userId || "-"}</p>
+                <h2>{fullName || "Здесь будет имя пользователя"}</h2>
+                <p>id: {userId || "-"}</p>
+                <ProfileStatus
+                  status={status}
+                  updateUserStatus={updateUserStatus}
+                />
               </div>
-              {props.lookingForAJob && (
+              {lookingForAJob && (
                 <div className={s.Profile__Job}>
                   <img
                     className={s.Profile__JobIcon}
@@ -32,7 +50,7 @@ const Profile = (props: UserProfile) => {
                     alt="Иконка - активный поиск работы"
                   />
                   <p className={s.Profile__JobDescription}>
-                    {props.lookingForAJobDescription}
+                    {lookingForAJobDescription}
                   </p>
                 </div>
               )}
@@ -40,34 +58,20 @@ const Profile = (props: UserProfile) => {
             <div className={s.Profile__Info}>
               <div className={s.Profile__About}>
                 <h4>Немного обо мне...</h4>
-                <p>{props.aboutMe || "-"}</p>
+                <p>{aboutMe || "-"}</p>
               </div>
               <div className={s.Profile__Contacts}>
                 <ul>
-                  <li>
-                    <SmartLink url={props.contacts.facebook}>Facebook</SmartLink>
-                  </li>
-                  <li>
-                    <SmartLink url={props.contacts.github}>Github</SmartLink>
-                  </li>
-                  <li>
-                    <SmartLink url={props.contacts.instagram}>Instagram</SmartLink>
-                  </li>
-                  <li>
-                    <SmartLink url={props.contacts.mainLink}>MainLink</SmartLink>
-                  </li>
-                  <li>
-                    <SmartLink url={props.contacts.twitter}>Twitter</SmartLink>
-                  </li>
-                  <li>
-                    <SmartLink url={props.contacts.vk}>VK</SmartLink>
-                  </li>
-                  <li>
-                    <SmartLink url={props.contacts.website}>WebSite</SmartLink>
-                  </li>
-                  <li>
-                    <SmartLink url={props.contacts.youtube}>YouTube</SmartLink>
-                  </li>
+                  {Object.entries(contacts).map(([key, value]) => (
+                    <li key={key}>
+                      <SmartLink
+                        url={value}
+                        title={key.toUpperCase()}
+                        src={getIcon(key)}
+                        alt={`Иконка ${key}`}
+                      />
+                    </li>
+                  ))}
                 </ul>
               </div>
             </div>
