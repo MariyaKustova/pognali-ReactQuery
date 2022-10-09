@@ -1,17 +1,27 @@
 @import '../../../BaseStyles/Fonts.module.scss';
 @import '../../../BaseStyles/Variables.module.scss';
+@import '../../../BaseStyles/Mixins.module.scss';
+
+.FriendItem {
+  @include light-text-link;
+  text-decoration: none;
+  max-width: 75px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: inherit;
+
+  &:hover {
+    color: $light-gold;
+  }
+}
 
 .FriendItem__name {
-  font-size: 24px;
-  line-height: 36px;
-  font-family: "BloggerSans";
-
   &::before {
-     content: '';
-     display: block;
-     width: 15px;
-     height: 15px;
-     background-color: $light-gold;
-     border-radius: 50%;
+    content: '';
+    display: block;
+    width: 15px;
+    height: 15px;
+    background-color: $light-gold;
+    border-radius: 50%;
   }
 }

@@ -15,6 +15,7 @@ import {
   getTotalCount,
   getUsersInfo,
 } from "../../redux/selectors.ts/usersSelectors";
+import { State } from "../../redux/reduxStore";
 
 const PAGE_SIZE = 5;
 
@@ -35,9 +36,14 @@ class UsersContainer extends React.Component<UsersContainerProps> {
     this.props.getUsers(this.props.currentPage, PAGE_SIZE);
   }
 
+  componentDidUpdate(prevProps: UsersContainerProps): void {
+    if (prevProps.currentPage !== this.props.currentPage) {
+      this.props.getUsers(this.props.currentPage, PAGE_SIZE);
+    }
+  }
+
   changeCurrentPage = (newPage: number) => {
     this.props.setCurrentPage(newPage);
-    this.props.getUsers(this.props.currentPage, PAGE_SIZE);
   };
 
   render(): JSX.Element {
@@ -52,7 +58,7 @@ class UsersContainer extends React.Component<UsersContainerProps> {
         {this.props.isFetching ? (
           <Loader />
         ) : (
-          this.props.users.map((user: any) => (
+          this.props.users.map((user: User) => (
             <UserItem
               key={user.id}
               user={user}
@@ -67,7 +73,7 @@ class UsersContainer extends React.Component<UsersContainerProps> {
   }
 }
 
-const mapStateToProps = (state: any) => ({
+const mapStateToProps = (state: State) => ({
   users: getUsersInfo(state),
   totalCount: getTotalCount(state),
   currentPage: getCurrentPage(state),

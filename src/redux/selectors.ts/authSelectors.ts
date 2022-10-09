@@ -1,3 +1,5 @@
-export const getIsAuth = (state: any) => state.auth.auth.isAuth;
+import { State } from "../reduxStore";
 
-export const getCurrentUser = (state: any) => state.auth.currentUser;
+export const getIsAuth = (state: State) => state.auth.auth.isAuth;
+
+export const getCurrentUser = (state: State) => state.auth.currentUser;

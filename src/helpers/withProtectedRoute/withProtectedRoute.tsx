@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { Navigate } from "react-router-dom";
 
 import { ROUTE_PATH } from "../../constants";
+import { State } from "../../redux/reduxStore";
 import { getIsAuth } from "../../redux/selectors.ts/authSelectors";
 
 interface ProtectedRouteProps {
@@ -17,7 +18,7 @@ export const withProtectedRoute = (Component: any) => {
     }
   }
 
-  const mapStateToProps = (state: any) => ({
+  const mapStateToProps = (state: State) => ({
     isAuth: getIsAuth(state),
   });
   

@@ -104,7 +104,7 @@ export const unfollowSuccess = (userId: number) => ({
   type: UNFOLLOW,
   payload: userId,
 });
-export const setUsers = (users: any) => ({
+export const setUsers = (users: User[]) => ({
   type: SET_USERS,
   payload: users,
 });

@@ -9,10 +9,11 @@ import {
   getCurrentUser,
   getIsAuth,
 } from "../../redux/selectors.ts/authSelectors";
+import { State } from "../../redux/reduxStore";
 
 interface HeaderContainerProps {
   isAuth: boolean;
-  currentUser: UserProfile;
+  currentUser: UserProfile | null;
   logoutUser: () => void;
 }
 
@@ -28,7 +29,7 @@ class HeaderContainer extends React.Component<HeaderContainerProps> {
   }
 }
 
-const mapStateToProps = (state: any) => ({
+const mapStateToProps = (state: State) => ({
   isAuth: getIsAuth(state),
   currentUser: getCurrentUser(state),
 });

@@ -26,13 +26,13 @@ const Dialogs: FC<DialogsProps> = ({
     <div className={s.Dialogs}>
       <div className={s.Dialogs__Wrapper}>
         <ul className={s.Dialogs__List}>
-          {dialogsData.map((dialog: any, index: any) => (
+          {dialogsData.map((dialog: Dialog, index: number) => (
             <DialogItem key={index} path={dialog.id} content={dialog.name} />
           ))}
         </ul>
         <div>
           <ul className={s.Dialogs__List}>
-            {messagesData.map((message: any, index: any) => (
+            {messagesData.map((message: Message, index: number) => (
               <MessageItem key={index} message={message.message} />
             ))}
           </ul>          

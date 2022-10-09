@@ -1,12 +1,16 @@
-import React from "react";
+import React, { FC } from "react";
 import { NavLink } from "react-router-dom";
 
 import { ROUTE_PATH } from "../../../../constants";
 
 import s from "./DialogItem.module.scss";
 
-const DialogItem = (props: any) => {
-  const { path, content } = props;
+interface DialogItemProps {
+  path: string;
+  content: string;
+}
+
+const DialogItem: FC<DialogItemProps> = ({ path, content }) => {
   return (
     <li className={s.DialogItem__Dialog}>
       <NavLink

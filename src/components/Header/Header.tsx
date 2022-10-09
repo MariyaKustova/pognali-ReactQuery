@@ -8,7 +8,7 @@ import s from "./Header.module.scss";
 
 interface HeaderProps {
   isAuth: boolean;
-  currentUser: UserProfile;
+  currentUser: UserProfile | null;
   logout: () => void;
 }
 
@@ -65,30 +65,6 @@ const Header: FC<HeaderProps> = (props) => {
               alt="Логотип"
             />
           </picture>
-          {/* <picture className={s.Header__LightTheme}>
-          <source type="image/webp" media="(min-width: 1440px)" srcSet="
-              ./img/webp/logo-desktop-blue@1x.webp 1x,
-              ./img/webp/logo-desktop-blue@2x.webp 2x
-            " />
-          <source type="image/webp" media="(min-width: 768px)" srcSet="
-              ./img/webp/logo-tablet-blue@1x.webp 1x,
-              ./img/webp/logo-tablet-blue@2x.webp 2x
-            " />
-          <source type="image/webp" media="(min-width: 320px)" srcSet="
-              ./img/webp/logo-mobile-blue@1x.webp 1x,
-              ./img/webp/logo-mobile-blue@2x.webp 2x
-            " />
-          <source media="(min-width: 1440px)" srcSet="
-              ./img/content/logo-desktop-blue@1x.png 1x,
-              ./img/content/logo-desktop-blue@2x.png 2x
-            " />
-          <source media="(min-width: 768px)" srcSet="
-              ./img/content/logo-tablet-blue@1x.png 1x,
-              ./img/content/logo-tablet-blue@2x.png 2x
-            " />
-          <img className={s.Header__Logo} src="./img/content/logo-mobile-blue@1x.png"
-            srcSet="./img/content/logo-mobile-blue@2x.png 2x" loading="lazy" alt="Логотип" />
-        </picture> */}
         </Link>
         <div className={s.Header__rightContent}>
           {isAuth ? (
@@ -99,7 +75,7 @@ const Header: FC<HeaderProps> = (props) => {
               >
                 Log out
               </button>
-              <Link to={`${ROUTE_PATH.PROFILE}/${currentUser?.userId}`}>
+              <Link to={`${ROUTE_PATH.PROFILE}`}>
                 <div className={s.Header__Login}>
                   <img
                     className={s.Header__Img}

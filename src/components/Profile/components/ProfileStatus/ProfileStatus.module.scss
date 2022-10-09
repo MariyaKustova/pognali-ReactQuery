@@ -4,6 +4,7 @@
 .ProfileStatus {
   position: relative;
   @include small-text;
+  cursor: pointer;
 }
 
 .ProfileStatus__Hint {

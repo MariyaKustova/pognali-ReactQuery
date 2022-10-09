@@ -1,0 +1,17 @@
+.ProfileInfoForm {
+  width: 100%;
+}
+
+.ProfileInfoForm__contacts {
+  display: flex;
+  gap: 15px;
+}
+
+.ProfileInfoForm__contactsWrapper {
+  flex-grow: 1;
+}
+
+.ProfileInfoForm__buttonWrapper {
+  display: flex;
+  justify-content: flex-end;
+}

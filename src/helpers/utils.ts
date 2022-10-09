@@ -4,3 +4,8 @@ export const capitalizeFirstLetter = (value: string) =>
 export const generateKey = (data: string) => {
   return `${data}_${new Date().getTime()}`;
 };
+
+export const editName = (name: string) => {
+  const indexDot = name.indexOf('.');
+  return indexDot ? name.substring(indexDot + 1) : name;
+}

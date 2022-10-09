@@ -30,7 +30,7 @@ const securityReducer = (state = initialState, action: any) => {
   }
 };
 
-export const setErrorMessage = (messages: string[]) => ({
+export const setErrorMessage = (messages: string[] | null) => ({
   type: SET_ERROR_MESSAGE,
   payload: messages,
 });

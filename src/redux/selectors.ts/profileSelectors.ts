@@ -1,5 +1,7 @@
-export const getProfileStatus = (state: any) => state.profile.status;
+import { State } from "../reduxStore";
 
-export const getUserProfile = (state: any) => state.profile.userProfile;
+export const getProfileStatus = (state: State) => state.profile.status;
 
-export const getPostsData = (state: any) => state.profile.postsData;
+export const getUserProfile = (state: State) => state.profile.userProfile;
+
+export const getPostsData = (state: State) => state.profile.postsData;

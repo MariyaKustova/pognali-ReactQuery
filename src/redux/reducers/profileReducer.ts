@@ -1,5 +1,5 @@
-import { SET_NEW_POST, SET_USER_PROFILE, SET_USER_STATUS } from './../action';
-import { Post, UserProfile } from "../../components/Profile/types";
+import { SET_NEW_POST, SET_USER_PHOTO_SUCCESS, SET_USER_PROFILE, SET_USER_STATUS } from './../action';
+import { Post, UserPhotos, UserProfile } from "../../components/Profile/types";
 
 export interface ProfileState {
   postsData: Post[];
@@ -72,6 +72,13 @@ const profileReducer = (state = initialState, action: any) => {
       };
     }
 
+    case SET_USER_PHOTO_SUCCESS: {
+      return {
+        ...state,
+        userProfile: {...state.userProfile, photos: action.payload},
+      };
+    }
+
     default:
       return state;
   }
@@ -80,5 +87,6 @@ const profileReducer = (state = initialState, action: any) => {
 export const setNewPost = (newPost: string) => ({type: SET_NEW_POST, payload: newPost})
 export const setUserProfile = (profile: UserProfile) => ({type: SET_USER_PROFILE, payload: profile})
 export const setUserStatus = (status: string) => ({type: SET_USER_STATUS, payload: status})
+export const setUserPhotosSuccess = (photos: UserPhotos) => ({type: SET_USER_PHOTO_SUCCESS, payload: photos})
 
 export default profileReducer;

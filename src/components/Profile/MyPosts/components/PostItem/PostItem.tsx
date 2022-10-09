@@ -1,9 +1,13 @@
-import React from "react";
+import React, { FC } from "react";
 
 import s from "./Post.module.scss";
 
-const Post = (props: any) => {
-  const { message, countLikes } = props;
+interface PostItemProps {
+  message: string;
+  countLikes: number;
+}
+
+const PostItem: FC<PostItemProps> = ({ message, countLikes }) => {
   return (
     <li className={s.Post}>
       <picture>
@@ -58,4 +62,4 @@ const Post = (props: any) => {
   );
 };
 
-export default Post;
+export default PostItem;

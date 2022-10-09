@@ -7,12 +7,13 @@ import Button from "../../common/Button/Button";
 import Checkbox from "../../common/Checkbox/Checkbox";
 import { FieldNames } from "./constants";
 import { createController } from "./helpers";
+import { LoginFormValues } from "./types";
 
 import s from "./LoginForm.module.scss";
 
 interface LoginFormProps {
-  onSubmit: (values: any) => void;
-  captcha: string;
+  onSubmit: (values: LoginFormValues) => void;
+  captcha: string | null;
 }
 
 const schema = yup
@@ -23,7 +24,7 @@ const schema = yup
   .required();
 
 const LoginForm: FC<LoginFormProps> = ({ onSubmit, captcha }) => {
-  const { control, handleSubmit } = useForm({
+  const { control, handleSubmit } = useForm<LoginFormValues>({
     defaultValues: {
       [FieldNames.LOGIN]: "",
       [FieldNames.PASSWORD]: "",

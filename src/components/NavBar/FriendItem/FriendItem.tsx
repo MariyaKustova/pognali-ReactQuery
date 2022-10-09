@@ -1,16 +1,19 @@
 import React, { FC } from "react";
+import { NavLink } from "react-router-dom";
+import { ROUTE_PATH } from "../../../constants";
 
 import s from "./FriendItem.module.scss";
 
 interface FriendItemProps {
+  id: string;
   name: string;
 }
 
-const FriendItem: FC<FriendItemProps> = ({ name }) => {
+const FriendItem: FC<FriendItemProps> = ({ id, name }) => {
   return (
-    <div>
-      <span className={s.FriendItem__name}>{name}</span>
-    </div>
+    <NavLink className={s.FriendItem} to={`${ROUTE_PATH.PROFILE}/${id}`}>
+        <span className={s.FriendItem__name}>{name}</span>
+    </NavLink>
   );
 };
 

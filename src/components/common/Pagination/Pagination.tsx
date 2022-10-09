@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useMemo, useState } from "react";
 import classNames from "classnames";
 
 import s from "./Pagination.module.scss";
@@ -25,19 +25,39 @@ const Pagination: FC<PaginationProps> = ({
   for (let i = 1; i <= pagesTotalCount; i++) {
     pages.push(i);
   }
-
   const pagesPortionCount = Math.ceil(pagesTotalCount / portionSize);
-  let [portionNumber, setPortionNumber] = useState<number>(1);
-  const leftPortionPageNumber = (portionNumber - 1) * portionSize + 1;
-  const rightPortionPageNumber = portionNumber * portionSize;
+  
+  const [portionNumber, setPortionNumber] = useState<number>(1);
+  
+  const leftPortionPageNumber = useMemo(
+    () => (portionNumber - 1) * portionSize + 1,
+    [portionNumber, portionSize]
+  );
+  const rightPortionPageNumber = useMemo(
+    () => portionNumber * portionSize,
+    [portionNumber, portionSize]
+  );
 
-  const onClickBack = () => setPortionNumber(--portionNumber);
-  const onClickNext = () => setPortionNumber(++portionNumber);
+  useEffect(() => {
+    onClick(leftPortionPageNumber);
+  }, [leftPortionPageNumber])
+
+
+  const onClickBack = () => {
+    setPortionNumber(portionNumber - 1);
+  };
+
+  const onClickNext = () => {
+    setPortionNumber(portionNumber + 1);
+  };
 
   return (
     <div className={s.Pagination}>
       {portionNumber > 1 && (
-        <button onClick={onClickBack} className={classNames(s.Pagination__Button, s.Pagination__ButtonBack)} />
+        <button
+          onClick={onClickBack}
+          className={classNames(s.Pagination__Button, s.Pagination__ButtonBack)}
+        />
       )}
       {pages
         .filter(
@@ -56,7 +76,10 @@ const Pagination: FC<PaginationProps> = ({
           </span>
         ))}
       {portionNumber < pagesPortionCount && (
-        <button onClick={onClickNext} className={classNames(s.Pagination__Button, s.Pagination__ButtonNext)} />
+        <button
+          onClick={onClickNext}
+          className={classNames(s.Pagination__Button, s.Pagination__ButtonNext)}
+        />
       )}
     </div>
   );

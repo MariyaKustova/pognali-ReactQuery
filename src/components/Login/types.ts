@@ -2,29 +2,28 @@ export interface requestLoginData {
   email: string;
   password: string;
   rememberMe: boolean;
-  captcha?: boolean;
+  captcha?: string;
 }
 
-export interface ResponseData {
-  data: ResponseDataLogin;
-}
-
-export interface ResponseEmptyData {
-  data: ResponseDataLogout;
-}
-
-export interface ResponseDataLogin {
+export interface ResponseDataBase {
   resultCode: number;
   messages: string[];
+}
+export interface ResponseLogin extends ResponseDataBase {
   data: {
     userId?: number;
   };
 }
+export interface ResponseMe extends ResponseDataBase {
+  data: {
+    id: number;
+    email: string;
+    login: string;
+  };
+}
 
-export interface ResponseDataLogout {
-  resultCode: number;
+export interface ResponseLogout extends ResponseDataBase {
   fieldsErrors: string[];
-  messages: string[];
   data: {
     userId: number;
   };
@@ -32,4 +31,15 @@ export interface ResponseDataLogout {
 
 export interface ResponseCaptcha {
   url: string;
+}
+
+export interface ResponseDataLogin {
+  data: ResponseLogin;
+}
+
+export interface ResponseDataLogout {
+  data: ResponseLogout;
+}
+export interface ResponseDataMe {
+  data: ResponseMe;
 }

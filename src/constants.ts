@@ -7,7 +7,6 @@ export const ROUTE_PATH = {
   NEWS: '/news',
   MUSIC: '/music',
   SETTINGS: '/settings',
-  FRIENDS: '/friends',
   USERS: '/users',
   LOGIN: '/login',
 }

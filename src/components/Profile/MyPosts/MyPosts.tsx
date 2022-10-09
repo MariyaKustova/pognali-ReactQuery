@@ -1,13 +1,17 @@
-import React, { Fragment } from "react";
-import Post from "./components/Post/Post";
+import React, { FC, Fragment } from "react";
+import PostItem from "./components/PostItem/PostItem";
 import PostForm from "./components/PostForm/PostForm";
+import { Post } from "../types";
 
 import s from "./MyPosts.module.scss";
 
-const MyPosts = (props: any) => {
-  const { posts, addPost } = props;
+interface MyPostsProps {
+  posts: Post[];
+  addPost: (newPost: string) => void;
+}
 
-  const onSubmit = (values: {newPost: string}) => {    
+const MyPosts: FC<MyPostsProps> = ({ posts, addPost }) => {
+  const onSubmit = (values: { newPost: string }) => {
     values.newPost.length && addPost(values.newPost);
   };
 
@@ -15,8 +19,8 @@ const MyPosts = (props: any) => {
     <Fragment>
       <PostForm onSubmit={onSubmit} />
       <ul className={s.MyPosts}>
-        {posts.map((post: any, index: any) => (
-          <Post
+        {posts.map((post: Post, index: number) => (
+          <PostItem
             key={index}
             message={post.message}
             countLikes={post.countLikes}

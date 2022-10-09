@@ -10,7 +10,7 @@ interface NavBarProps {
   friends: Friend[];
 }
 
-const NavBar: FC<NavBarProps> = ({friends}) => {
+const NavBar: FC<NavBarProps> = ({ friends }) => {
   return (
     <nav className={s.NavBar}>
       <ul>
@@ -75,18 +75,11 @@ const NavBar: FC<NavBarProps> = ({friends}) => {
           </NavLink>
         </li>
         <li>
-          <div className={s.NavBar__Link}>
-            <NavLink
-              className={({ isActive }) =>
-                isActive ? s.NavBar__ActiveLink : s.NavBar__Link
-              }
-              to={ROUTE_PATH.FRIENDS}
-            >
-              Friends
-            </NavLink>
+          <div className={s.NavBar__FriendsSection}>
+            <span className={s.NavBar__Title}>Friends</span>
             <div className={s.NavBar__Wrapper}>
               {friends.map((friend) => (
-                <FriendItem key={friend.id} name={friend.name} />
+                <FriendItem key={friend.id} id={friend.id} name={friend.name} />
               ))}
             </div>
           </div>

@@ -1,3 +1,5 @@
-export const getErrorMessages = (state: any) => state.security.messages;
+import { State } from './../reduxStore';
 
-export const getCaptcha = (state: any) => state.security.captcha;
+export const getErrorMessages = (state: State) => state.security.messages;
+
+export const getCaptcha = (state: State) => state.security.captcha;

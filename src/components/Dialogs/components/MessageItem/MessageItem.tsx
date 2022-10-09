@@ -1,13 +1,13 @@
-import React from "react";
+import React, { FC } from "react";
 
-import s from './MessageItem.module.scss';
+import s from "./MessageItem.module.scss";
 
+interface MessageItemProps {
+  message: string;
+}
 
-const MessageItem = (props: any) => {
-  const {message} = props;
-  return (
-    <li className={s.MessageItem}>{message}</li>
-  );
+const MessageItem: FC<MessageItemProps> = ({ message }) => {
+  return <li className={s.MessageItem}>{message}</li>;
 };
 
 export default MessageItem;

@@ -1,9 +1,11 @@
-export const getUsersInfo = (state: any) => state.usersPage.users;
+import { State } from "../reduxStore";
 
-export const getTotalCount = (state: any) => state.usersPage.totalCount;
+export const getUsersInfo = (state: State) => state.usersPage.users;
 
-export const getCurrentPage = (state: any) => state.usersPage.currentPage;
+export const getTotalCount = (state: State) => state.usersPage.totalCount;
 
-export const getIsFetching = (state: any) => state.usersPage.isFetching;
+export const getCurrentPage = (state: State) => state.usersPage.currentPage;
 
-export const getFollowingInProgress = (state: any) => state.usersPage.followingInProgress;
+export const getIsFetching = (state: State) => state.usersPage.isFetching;
+
+export const getFollowingInProgress = (state: State) => state.usersPage.followingInProgress;

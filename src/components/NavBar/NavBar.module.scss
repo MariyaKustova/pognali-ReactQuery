@@ -29,14 +29,27 @@
   @include link;  
   font-family: "BloggerSans-Medium";
   color: $dark-blue-grey;
+
+  &:hover {
+    color: $light-gold;
+  }
+}
+
+.NavBar__FriendsSection {
+  @include light-text-link;
+  color: $dark-blue-grey;
 }
 
 .NavBar__ActiveLink {
   text-decoration: underline;
 }
 
+.NavBar__Title {
+  @include light-text-link;  
+}
+
 .NavBar__Wrapper {
   display: flex;
   justify-content: space-between;
-  margin-top: 15px;
+  margin-top: 5px;
 }

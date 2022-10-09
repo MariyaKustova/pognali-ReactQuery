@@ -7,12 +7,16 @@ import { securityAPI } from "../API/security";
 import {
   requestLoginData,
   ResponseCaptcha,
-  ResponseDataLogin,
-  ResponseDataLogout,
+  ResponseLogin,
+  ResponseLogout,
 } from "../components/Login/types";
 import { UsersResponse } from "../components/Users/types";
 import { setCurrentUser, setUserData } from "./reducers/authReducer";
-import { setUserProfile, setUserStatus } from "./reducers/profileReducer";
+import {
+  setUserProfile,
+  setUserStatus,
+  setUserPhotosSuccess,
+} from "./reducers/profileReducer";
 import {
   followSuccess,
   unfollowSuccess,
@@ -22,16 +26,19 @@ import {
   setTotalCountPages,
 } from "./reducers/usersReducer";
 import { appInitSuccess } from "./reducers/appReducer";
+import { ProfileFormValues } from "../components/Profile/types";
+import { State } from "./reduxStore";
+import { setFriends } from "./reducers/navbarReducer";
 
 //Users
 
 export const getUsers =
-  (currentPage: number, PAGE_SIZE: number) => async (dispatch: Dispatch) => {
+  (currentPage: number = 1, PAGE_SIZE: number = 5) => async (dispatch: Dispatch) => {
     dispatch(toggleIsFetching(true));
     const data: UsersResponse = await usersAPI.getUsers(currentPage, PAGE_SIZE);
     dispatch(toggleIsFetching(false));
     dispatch(setUsers(data.items));
-    dispatch(setTotalCountPages(data.totalCount))
+    dispatch(setTotalCountPages(data.totalCount));
   };
 
 const followUnfollowFlow = async (
@@ -49,11 +56,21 @@ const followUnfollowFlow = async (
 };
 
 export const follow = (userId: number) => async (dispatch: Dispatch) => {
-  followUnfollowFlow(dispatch, userId, usersAPI.follow.bind(usersAPI), followSuccess)
+  followUnfollowFlow(
+    dispatch,
+    userId,
+    usersAPI.follow.bind(usersAPI),
+    followSuccess
+  );
 };
 
 export const unfollow = (userId: number) => async (dispatch: Dispatch) => {
-  followUnfollowFlow(dispatch, userId, usersAPI.unfollow.bind(usersAPI), unfollowSuccess)
+  followUnfollowFlow(
+    dispatch,
+    userId,
+    usersAPI.unfollow.bind(usersAPI),
+    unfollowSuccess
+  );
 };
 
 //security
@@ -78,11 +95,12 @@ export const authUser = () => async (dispatch: Dispatch) => {
 
 export const loginUser =
   (requestData: requestLoginData) => async (dispatch: any) => {
-    const data: ResponseDataLogin = await authAPI.login(requestData);
+    const data: ResponseLogin = await authAPI.login(requestData);
     switch (String(data.resultCode)) {
       case "0":
         dispatch(authUser());
         dispatch(setCapthaUrl(null));
+        dispatch(setErrorMessage(null));
         break;
       case "1":
         dispatch(setErrorMessage(data.messages));
@@ -97,7 +115,7 @@ export const loginUser =
   };
 
 export const logoutUser = () => async (dispatch: Dispatch) => {
-  const data: ResponseDataLogout = await authAPI.logout();
+  const data: ResponseLogout = await authAPI.logout();
   if (data.resultCode === 0) {
     dispatch(setUserData(null, null, null, false));
     dispatch(setCurrentUser(null));
@@ -124,9 +142,33 @@ export const updateUserStatus =
     }
   };
 
+export const savePhoto = (photo: File) => async (dispatch: Dispatch) => {  
+  const data = await profileAPI.savePhoto(photo);
+  if (data.resultCode === 0) {
+    dispatch(setUserPhotosSuccess(data.data.photos));
+  }
+};
+
+export const saveProfile = (profile: ProfileFormValues) => async (dispatch: any, getState:() => State) => {
+  const userId = getState().profile?.userProfile?.userId;
+  const data = await profileAPI.saveProfile(profile);
+  if (data.resultCode === 0 && userId) {    
+    dispatch(setErrorMessage(null));
+    dispatch(getProfile(userId));
+  }
+};
+
 // app
 
 export const initApp = () => (dispatch: any) => {
   let promise = dispatch(authUser());
   Promise.all([promise]).then(() => dispatch(appInitSuccess()));
 };
+
+// navBar
+
+export const getFriends =
+  (currentPage: number = 1, PAGE_SIZE: number = 10) => async (dispatch: any) => {
+    const data: UsersResponse = await usersAPI.getUsers(currentPage, PAGE_SIZE);
+    dispatch(setFriends(data.items));
+  };
