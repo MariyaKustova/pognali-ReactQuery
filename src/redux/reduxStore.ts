@@ -1,6 +1,4 @@
-import { applyMiddleware } from "redux";
 import { configureStore } from "@reduxjs/toolkit";
-import thunkMiddleWare from "redux-thunk";
 import appReducer from "./slices/appSlice";
 import authReducer from "./slices/authSlice";
 import dialogsReducer from "./slices/dialogsSlice";
@@ -19,14 +17,7 @@ const store = configureStore({
     security: securityReducer,
     usersPage: usersReducer,
   },
-},   
- // @ts-ignore
- window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ &&
- // @ts-ignore
- window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__(
-   applyMiddleware(thunkMiddleWare)
- )
-);
+});
 
 export type State = ReturnType<typeof store.getState>;
 
