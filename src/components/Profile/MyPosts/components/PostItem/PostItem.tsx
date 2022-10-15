@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 
-import s from "./Post.module.scss";
+import s from "./PostItem.module.scss";
 
 interface PostItemProps {
   message: string;

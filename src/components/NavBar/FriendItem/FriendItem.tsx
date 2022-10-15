@@ -5,7 +5,7 @@ import { ROUTE_PATH } from "../../../constants";
 import s from "./FriendItem.module.scss";
 
 interface FriendItemProps {
-  id: string;
+  id: number;
   name: string;
 }
 

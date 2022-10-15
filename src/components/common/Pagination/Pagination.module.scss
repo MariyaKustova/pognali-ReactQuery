@@ -7,83 +7,83 @@
   display: flex;
   justify-content: center;
   align-items: center;
-}
 
-.Pagination__PageItem {
-  background-color: $light-gold;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  color: $dark-blue-grey;
-  font-family: "BloggerSans-Light";
-  font-size: 15px;
-  line-height: 30px;
-  cursor: pointer;
-
-  &:not(:last-child) {
+  &__PageItem {
+    background-color: $light-gold;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    color: $dark-blue-grey;
+    font-family: "BloggerSans-Light";
+    font-size: 15px;
+    line-height: 30px;
+    cursor: pointer;
+  
+    &:not(:last-child) {
+      margin-right: 5px;
+    }
+  
+    &:hover {
+      background-color: $mango-two;
+    }
+  }
+  
+  &__PageItemActive {
+    background-color: $mango;
+  }
+  
+  &__Button {
+    border: none;
+    background-color: $light-gold;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    position: relative;
     margin-right: 5px;
+  
+    &:hover {
+      background-color: $mango-two;
+    }
   }
-
-  &:hover {
-    background-color: $mango-two;
+  
+  &__ButtonNext,
+  &__ButtonBack {
+    &::before,
+    &::after {
+      content: '';
+      display: block;
+      width: 2px;
+      height: 10px;
+      background-color: $dark-blue-grey;
+      position: absolute;
+    }
   }
+  
+  &__ButtonNext {
+    &::before {
+      transform: rotate(45deg);
+      top: 13px;
+      left: 15px;
+    }
+  
+    &::after {
+      transform: rotate(-45deg);
+      top: 7px;
+      left: 15px;
+    }  
+  }
+  
+  &__ButtonBack {
+    &::before {
+      transform: rotate(45deg);
+      top: 7px;
+      left: 13px;
+    }
+  
+    &::after {
+      transform: rotate(-45deg);
+      top: 13px;
+      left: 13px;
+    }  
+  } 
 }
-
-.Pagination__PageItemActive {
-  background-color: $mango;
-}
-
-.Pagination__Button {
-  border: none;
-  background-color: $light-gold;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  position: relative;
-  margin-right: 5px;
-
-  &:hover {
-    background-color: $mango-two;
-  }
-}
-
-.Pagination__ButtonNext,
-.Pagination__ButtonBack {
-  &::before,
-  &::after {
-    content: '';
-    display: block;
-    width: 2px;
-    height: 10px;
-    background-color: $dark-blue-grey;
-    position: absolute;
-  }
-}
-
-.Pagination__ButtonNext {
-  &::before {
-    transform: rotate(45deg);
-    top: 13px;
-    left: 15px;
-  }
-
-  &::after {
-    transform: rotate(-45deg);
-    top: 7px;
-    left: 15px;
-  }  
-}
-
-.Pagination__ButtonBack {
-  &::before {
-    transform: rotate(45deg);
-    top: 7px;
-    left: 13px;
-  }
-
-  &::after {
-    transform: rotate(-45deg);
-    top: 13px;
-    left: 13px;
-  }  
-} 

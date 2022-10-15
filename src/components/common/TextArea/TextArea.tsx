@@ -1,10 +1,12 @@
 import React, { ChangeEventHandler, ForwardedRef } from "react";
 import { has } from "lodash";
 import classnames from "classnames";
+
 import Button from "../Button/Button";
+import ErrorMessage from "../ErrorMessage/ErrorMessage";
 
 import s from "./TextArea.module.scss";
-import ErrorMessage from "../ErrorMessage/ErrorMessage";
+
 
 interface TextAreaProps {
   value: string;

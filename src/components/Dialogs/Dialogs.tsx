@@ -1,25 +1,23 @@
-import React, { FC } from "react";
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 import DialogItem from "./components/DialogItem/DialogItem";
 import MessageItem from "./components/MessageItem/MessageItem";
 import { Dialog, Message } from "./types";
 import DialogForm from "./components/DialogForm/DialogForm";
+import { AppDispatch, State } from "../../redux/reduxStore";
+import { getDialogsData, getMessagesData } from "../../redux/selectors.ts/dialogsSelectors";
+import { setNewMessage } from "../../redux/slices/dialogsSlice";
 
 import s from "./Dialogs.module.scss";
 
-interface DialogsProps {
-  dialogsData: Dialog[];
-  messagesData: Message[];
-  setNewMessage: (newMessage: string) => void;
-}
-
-const Dialogs: FC<DialogsProps> = ({
-  dialogsData,
-  messagesData,
-  setNewMessage,
-}) => {
+const Dialogs = () => {
+  const dialogsData = useSelector((state: State) => getDialogsData(state));
+  const messagesData = useSelector((state: State) => getMessagesData(state));
+  const dispatch = useDispatch<AppDispatch>();
+  
   const onSubmit = (values: {newMessage: string}) => {
-    values.newMessage.length && setNewMessage(values.newMessage);
+    values.newMessage.length && dispatch(setNewMessage(values.newMessage));
   };
 
   return (

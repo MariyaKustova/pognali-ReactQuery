@@ -1,4 +1,4 @@
-// Rotes
+// Routes
 
 export const ROUTE_PATH = {
   MAIN: '/',
@@ -12,3 +12,12 @@ export const ROUTE_PATH = {
 }
 
 export const HASH_STAR = '/*';
+
+export const routes = [
+  { to: ROUTE_PATH.PROFILE, title: "Profile" },
+  { to: ROUTE_PATH.DIALOGS, title: "Dialogs" },
+  { to: ROUTE_PATH.USERS, title: "Users" },
+  { to: ROUTE_PATH.NEWS, title: "News" },
+  { to: ROUTE_PATH.MUSIC, title: "Music" },
+  { to: ROUTE_PATH.SETTINGS, title: "Settings" },
+];

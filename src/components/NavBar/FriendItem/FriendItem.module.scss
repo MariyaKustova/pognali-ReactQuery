@@ -13,15 +13,15 @@
   &:hover {
     color: $light-gold;
   }
-}
 
-.FriendItem__name {
-  &::before {
-    content: '';
-    display: block;
-    width: 15px;
-    height: 15px;
-    background-color: $light-gold;
-    border-radius: 50%;
+  &__name {
+    &::before {
+      content: '';
+      display: block;
+      width: 15px;
+      height: 15px;
+      background-color: $light-gold;
+      border-radius: 50%;
+    }
   }
 }

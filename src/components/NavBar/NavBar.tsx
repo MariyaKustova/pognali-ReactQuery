@@ -1,89 +1,54 @@
-import React, { FC } from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
-import { ROUTE_PATH } from "../../constants";
+
+import { routes } from "../../constants";
 import FriendItem from "./FriendItem/FriendItem";
-import { Friend } from "./types";
+import { getNavbarFriends } from "../../redux/selectors.ts/navbarSelectors";
+import { AppDispatch, State } from "../../redux/reduxStore";
+import { getFriends } from "../../redux/slices/navbarSlice";
 
 import s from "./NavBar.module.scss";
 
-interface NavBarProps {
-  friends: Friend[];
-}
+const NavBar = () => {
+  const friends = useSelector((state: State) => getNavbarFriends(state));
+  const dispatch = useDispatch<AppDispatch>();
 
-const NavBar: FC<NavBarProps> = ({ friends }) => {
+  useEffect(() => {
+    dispatch(getFriends({}));
+  }, []);
+
   return (
     <nav className={s.NavBar}>
       <ul>
-        <li>
-          <NavLink
-            className={({ isActive }) =>
-              isActive ? s.NavBar__ActiveLink : s.NavBar__Link
-            }
-            to={ROUTE_PATH.PROFILE}
-          >
-            Profile
-          </NavLink>
-        </li>
-        <li>
-          <NavLink
-            className={({ isActive }) =>
-              isActive ? s.NavBar__ActiveLink : s.NavBar__Link
-            }
-            to={ROUTE_PATH.DIALOGS}
-          >
-            Dialogs
-          </NavLink>
-        </li>
-        <li>
-          <NavLink
-            className={({ isActive }) =>
-              isActive ? s.NavBar__ActiveLink : s.NavBar__Link
-            }
-            to={ROUTE_PATH.USERS}
-          >
-            Users
-          </NavLink>
-        </li>
-        <li>
-          <NavLink
-            className={({ isActive }) =>
-              isActive ? s.NavBar__ActiveLink : s.NavBar__Link
-            }
-            to={ROUTE_PATH.NEWS}
-          >
-            News
-          </NavLink>
-        </li>
-        <li>
-          <NavLink
-            className={({ isActive }) =>
-              isActive ? s.NavBar__ActiveLink : s.NavBar__Link
-            }
-            to={ROUTE_PATH.MUSIC}
-          >
-            Music
-          </NavLink>
-        </li>
-        <li>
-          <NavLink
-            className={({ isActive }) =>
-              isActive ? s.NavBar__ActiveLink : s.NavBar__Link
-            }
-            to={ROUTE_PATH.SETTINGS}
-          >
-            Settings
-          </NavLink>
-        </li>
-        <li>
-          <div className={s.NavBar__FriendsSection}>
-            <span className={s.NavBar__Title}>Friends</span>
-            <div className={s.NavBar__Wrapper}>
-              {friends.map((friend) => (
-                <FriendItem key={friend.id} id={friend.id} name={friend.name} />
-              ))}
+        {routes.map((route) => (
+          <li key={route.title}>
+            <NavLink
+              className={({ isActive }) =>
+                isActive ? s.NavBar__ActiveLink : s.NavBar__Link
+              }
+              to={route.to}
+            >
+              {route.title}
+            </NavLink>
+          </li>
+        ))}
+        {friends.length && (
+          <li>
+            <div className={s.NavBar__FriendsSection}>
+              <div className={s.NavBar__Title}>Friends</div>
+              <div className={s.NavBar__Wrapper}>
+                {friends.map((friend) => (
+                  <FriendItem
+                    key={friend.id}
+                    id={friend.id}
+                    name={friend.name}
+                  />
+                ))}
+              </div>
             </div>
-          </div>
-        </li>
+          </li>
+        )}
       </ul>
     </nav>
   );

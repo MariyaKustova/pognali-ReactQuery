@@ -4,8 +4,9 @@
 
 .Post {
   @include light-text();
-}
 
-.Post__Img {
-  border-radius: 30px;
+  &__Img {
+    border-radius: 30px;
+    width: 80px;
+  }
 }

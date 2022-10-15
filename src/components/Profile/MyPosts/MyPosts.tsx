@@ -1,18 +1,20 @@
-import React, { FC, Fragment } from "react";
+import React, { Fragment } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
 import PostItem from "./components/PostItem/PostItem";
 import PostForm from "./components/PostForm/PostForm";
 import { Post } from "../types";
+import { State } from "../../../redux/reduxStore";
+import { getPostsData } from "../../../redux/selectors.ts/profileSelectors";
+import { setNewPost } from "../../../redux/slices/profileSlice";
 
 import s from "./MyPosts.module.scss";
 
-interface MyPostsProps {
-  posts: Post[];
-  addPost: (newPost: string) => void;
-}
-
-const MyPosts: FC<MyPostsProps> = ({ posts, addPost }) => {
+const MyPosts = () => {
+  const posts = useSelector((state: State) => getPostsData(state));
+  const dispatch = useDispatch();
   const onSubmit = (values: { newPost: string }) => {
-    values.newPost.length && addPost(values.newPost);
+    values.newPost.length && dispatch(setNewPost(values.newPost));
   };
 
   return (

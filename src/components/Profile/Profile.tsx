@@ -1,37 +1,74 @@
-import React, { FC, useState } from "react";
-import _ from "lodash";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
 
-import { ProfileFormValues, ProfileProps } from "./types";
-import MyPostsContainer from "./MyPosts/MyPostsContainer";
+import { ProfileFormValues } from "./types";
+import MyPosts from "./MyPosts/MyPosts";
 import IconUser from "../../assets/images/user-icon.svg";
 import IconEdit from "../../assets/images/edit-icon.svg";
 import ProfileInfo from "./components/ProfileInfo/ProfileInfo";
 import ProfileInfoForm from "./components/ProfileInfoForm/ProfileInfoForm";
+import { AppDispatch, State } from "../../redux/reduxStore";
+import { getCurrentUser } from "../../redux/selectors.ts/authSelectors";
+import { getUserProfile } from "../../redux/selectors.ts/profileSelectors";
+import {
+  getProfile,
+  getUserStatus,
+  savePhoto,
+  saveProfile,
+} from "../../redux/slices/profileSlice";
+import Loader from "../common/Loader/Loader";
+import { ROUTE_PATH } from "../../constants";
 
 import s from "./Profile.module.scss";
 
-const Profile: FC<ProfileProps> = (props) => {
-  const { photos, isOwner, savePhoto, saveProfile, ...rest } = props;
+const Profile = () => {
+  const userProfile = useSelector((state: State) => getUserProfile(state));
+  const currentUser = useSelector((state: State) => getCurrentUser(state));
+  const dispatch = useDispatch<AppDispatch>();
+  const params = useParams();
+  const navigate = useNavigate();
 
+  const isOwner = userProfile?.userId === currentUser?.userId;
   const [editMode, setEditMode] = useState<boolean>(false);
 
+  const refreshProfile = () => {
+    const userId: string | number | undefined =
+      params.userId || currentUser?.userId;
+
+    if (userId) {
+      dispatch(getProfile(Number(userId)));
+      dispatch(getUserStatus(Number(userId)));
+    } else {
+      navigate(ROUTE_PATH.MAIN);
+    }
+  };
+
+  useEffect(() => {
+    refreshProfile();
+  }, []);
+
+  useEffect(() => {
+    refreshProfile();
+  }, [params.userId]);
+
   const onPhotoDownload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.currentTarget.files) savePhoto(e.currentTarget.files[0]);
+    if (e.currentTarget.files) dispatch(savePhoto(e.currentTarget.files[0]));
   };
 
   const onSubmit = (values: ProfileFormValues) => {
-    saveProfile(values);
+    dispatch(saveProfile(values));
     setEditMode(false);
   };
 
   return (
     <>
-      {!_.isEmpty(props) && (
+      {userProfile ? (
         <div className={s.Profile}>
           <div className={s.Profile__WrapperPhoto}>
             <img
               className={s.Profile__Photo}
-              src={photos.large || IconUser}
+              src={userProfile?.photos.large || IconUser}
               alt="Фотография пользователя"
             />
             {isOwner && (
@@ -48,10 +85,10 @@ const Profile: FC<ProfileProps> = (props) => {
             )}
           </div>
           {editMode ? (
-            <ProfileInfoForm onSubmit={onSubmit} {...rest} />
+            <ProfileInfoForm onSubmit={onSubmit} {...userProfile} />
           ) : (
             <>
-              <ProfileInfo {...rest} />
+              <ProfileInfo {...userProfile} />
               {isOwner && (
                 <div className={s.Profile__EditWrapper}>
                   <button
@@ -70,8 +107,10 @@ const Profile: FC<ProfileProps> = (props) => {
             </>
           )}
         </div>
+      ) : (
+        <Loader />
       )}
-      <MyPostsContainer />
+      <MyPosts />
     </>
   );
 };

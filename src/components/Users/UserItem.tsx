@@ -1,27 +1,22 @@
 import React, { FC } from "react";
 import { NavLink } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
 import Button from "../common/Button/Button";
 import IconUser from "../../assets/images/user-icon.svg";
 import { ROUTE_PATH } from "../../constants";
 import { User } from "./types";
+import { AppDispatch, State } from "../../redux/reduxStore";
+import { getFollowingInProgress } from "../../redux/selectors.ts/usersSelectors";
+import { follow, unfollow } from "../../redux/slices/usersSlice";
 
 import s from "./UserItem.module.scss";
 
-interface UserItemProps {
-  user: User;
-  follow: (userId: number) => void;
-  unfollow: (userId: number) => void;
-  followingInProgress: number[];
-}
-
-const UserItem: FC<UserItemProps> = ({
-  user,
-  follow,
-  unfollow,
-  followingInProgress,
-}) => {
-  const { id, name, photos, location, status, followed } = user;
+const UserItem: FC<User> = ({ id, name, photos, location, status, followed }) => {
+  const followingInProgress = useSelector((state: State) =>
+    getFollowingInProgress(state)
+  );
+  const dispatch = useDispatch<AppDispatch>();
 
   return (
     <div className={s.UserItem}>
@@ -39,9 +34,9 @@ const UserItem: FC<UserItemProps> = ({
                 className={s.UserItem__Button}
                 label={"Unfollow"}
                 disabled={followingInProgress.some((userId) => userId === id)}
-                onClick={(e: any) => {
-                  e.preventDefault();
-                  unfollow(id);
+                onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
+                  event.preventDefault();
+                  dispatch(unfollow(id));
                 }}
               />
             ) : (
@@ -49,9 +44,9 @@ const UserItem: FC<UserItemProps> = ({
                 className={s.UserItem__Button}
                 label={"Follow"}
                 disabled={followingInProgress.some((userId) => userId === id)}
-                onClick={(e: any) => {
+                onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
                   e.preventDefault();
-                  follow(id);
+                  dispatch(follow(id));
                 }}
               />
             )}

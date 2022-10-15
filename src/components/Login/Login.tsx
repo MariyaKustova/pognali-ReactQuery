@@ -1,48 +1,43 @@
 import React from "react";
-import { connect } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
 
 import { ROUTE_PATH } from "../../constants";
 import { generateKey } from "../../helpers/utils";
-import { State } from "../../redux/reduxStore";
+import { AppDispatch, State } from "../../redux/reduxStore";
 import { getIsAuth } from "../../redux/selectors.ts/authSelectors";
-import { getCaptcha, getErrorMessages } from "../../redux/selectors.ts/securitySelectors";
-import { loginUser } from "../../redux/thunkCreators";
+import {
+  getCaptcha,
+  getErrorMessages,
+} from "../../redux/selectors.ts/securitySelectors";
+import { loginUser } from "../../redux/slices/securitySlice";
 import ErrorMessage from "../common/ErrorMessage/ErrorMessage";
 import LoginForm from "./LoginForm/LoginForm";
 import { LoginFormValues } from "./LoginForm/types";
-import { requestLoginData } from "./types";
 
-interface LoginProps {
-  isAuth: boolean,
-  errorMessages: string[];
-  captcha: string | null;
-  loginUser: (values: requestLoginData) => void;
-}
+const Login = () => {
+  const isAuth = useSelector((state: State) => getIsAuth(state));
+  const captcha = useSelector((state: State) => getCaptcha(state));
+  const errorMessages = useSelector((state: State) => getErrorMessages(state));
+  const dispatch = useDispatch<AppDispatch>();
 
-
-class Login extends React.Component<LoginProps> {
-  onSubmit = (values: LoginFormValues) => {
-    const  { login, password, rememberMe, captcha } = values;
-    this.props.loginUser({email: login, password, rememberMe, captcha })
+  const onSubmit = (values: LoginFormValues) => {
+    const { login, password, rememberMe, captcha } = values;
+    dispatch(loginUser({ email: login, password, rememberMe, captcha }));
   };
 
-  render(): JSX.Element {
-    if (this.props.isAuth) return <Navigate to={ROUTE_PATH.MAIN} />;
-    return (
-      <>
-        <h1>Login</h1>
-        {this.props.errorMessages && this.props.errorMessages.map((message) => <ErrorMessage key={generateKey(message)} message={message} />)}
-        <LoginForm onSubmit={this.onSubmit} captcha={this.props.captcha}/>
-      </>
-    );
-  }
-}
+  if (isAuth) return <Navigate to={ROUTE_PATH.MAIN} />;
 
-const mapStateToProps = (state: State) => ({
-  isAuth: getIsAuth(state),
-  errorMessages: getErrorMessages(state),
-  captcha: getCaptcha(state),
-});
+  return (
+    <>
+      <h1>Login</h1>
+      {errorMessages &&
+        errorMessages.map((message) => (
+          <ErrorMessage key={generateKey(message)} message={message} />
+        ))}
+      <LoginForm onSubmit={onSubmit} captcha={captcha} />
+    </>
+  );
+};
 
-export default connect(mapStateToProps, { loginUser })(Login);
+export default Login;

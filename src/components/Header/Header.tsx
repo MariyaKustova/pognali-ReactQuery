@@ -1,19 +1,24 @@
-import React, { FC } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+
 import { ROUTE_PATH } from "../../constants";
 import IconUser from "../../assets/images/user-icon.svg";
-import { UserProfile } from "../Profile/types";
+import { getCurrentUser, getIsAuth } from "../../redux/selectors.ts/authSelectors";
+import { logoutUser } from "../../redux/slices/securitySlice";
+import { AppDispatch } from "../../redux/reduxStore";
 
 import s from "./Header.module.scss";
 
-interface HeaderProps {
-  isAuth: boolean;
-  currentUser: UserProfile | null;
-  logout: () => void;
-}
+const Header = () => {
+  const isAuth = useSelector(getIsAuth);
+  const currentUser = useSelector(getCurrentUser);
+  const dispatch = useDispatch<AppDispatch>();
 
-const Header: FC<HeaderProps> = (props) => {
-  const { isAuth, currentUser, logout } = props;
+  const onClick = () => {
+    dispatch(logoutUser());
+  }
+
   return (
     <header className={s.Header}>
       <div className={s.Header__Wrapper}>
@@ -71,7 +76,7 @@ const Header: FC<HeaderProps> = (props) => {
             <>
               <button
                 className={s.Header__btnLogout}
-                onClick={logout}
+                onClick={onClick}
               >
                 Log out
               </button>

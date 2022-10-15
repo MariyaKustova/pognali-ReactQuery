@@ -6,8 +6,8 @@
   padding: 30px;
   background-color: $mango;
   border-radius: 40px;
-  height: calc(100vh - 144px);
   margin-left: 30px;
+  min-height: 750px;
 
   ul {
     list-style: none;
@@ -22,34 +22,34 @@
   li:last-child {
     margin-top: 40px;
   }
-}
 
-.NavBar__Link, 
-.NavBar__ActiveLink {
-  @include link;  
-  font-family: "BloggerSans-Medium";
-  color: $dark-blue-grey;
+  &__Link,
+  &__ActiveLink {
+    @include link;
+    font-family: "BloggerSans-Medium";
+    color: $dark-blue-grey;
 
-  &:hover {
-    color: $light-gold;
+    &:hover {
+      color: $light-gold;
+    }
   }
-}
 
-.NavBar__FriendsSection {
-  @include light-text-link;
-  color: $dark-blue-grey;
-}
+  &__FriendsSection {
+    @include light-text-link;
+    color: $dark-blue-grey;
+  }
 
-.NavBar__ActiveLink {
-  text-decoration: underline;
-}
+  &__ActiveLink {
+    text-decoration: underline;
+  }
 
-.NavBar__Title {
-  @include light-text-link;  
-}
+  &__Title {
+    @include light-text-link;
+    margin-bottom: 10px;
+  }
 
-.NavBar__Wrapper {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 5px;
+  &__Wrapper {
+    display: flex;
+    justify-content: space-between;    
+  }
 }

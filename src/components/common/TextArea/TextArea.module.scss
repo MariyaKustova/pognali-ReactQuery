@@ -1,12 +1,6 @@
 @import '../../../BaseStyles/Variables.module.scss';
 @import '../../../BaseStyles/Mixins.module.scss';
 
-.TextArea__Wrapper {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-}
-
 .TextArea {
   width: auto;
   background-color: transparent;
@@ -21,13 +15,19 @@
   &:focus {
     border: 2px solid $mango;
   }
-}
 
-.TextArea__errorTextArea {
-  border-color: $mango;
-}
+  &__Wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
 
-.TextArea__Button {
-  @include light-text;
-  margin-left: auto;
+  &__errorTextArea {
+    border-color: $mango;
+  }
+
+  &__Button {
+    @include light-text;
+    margin-left: auto;
+  }
 }

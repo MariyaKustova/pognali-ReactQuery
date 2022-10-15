@@ -1,25 +1,29 @@
 import React, { FC, useEffect, useMemo, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import classNames from "classnames";
+
+import { AppDispatch, State } from "../../../redux/reduxStore";
+import { getCurrentPage, getTotalCount } from "../../../redux/selectors.ts/usersSelectors";
+import { setCurrentPage } from "../../../redux/slices/usersSlice";
 
 import s from "./Pagination.module.scss";
 
 interface PaginationProps {
-  totalCount: number;
   count: number;
-  currentPage: number;
-  onClick: (page: number) => void;
   className?: string;
   maxPagesCount?: number;
 }
 
 const Pagination: FC<PaginationProps> = ({
-  totalCount,
   count,
-  currentPage,
-  onClick,
   className,
   maxPagesCount: portionSize = 10,
 }) => {
+  const totalCount = useSelector((state: State) => getTotalCount(state));
+  const currentPage = useSelector((state: State) => getCurrentPage(state));
+
+  const dispatch = useDispatch<AppDispatch>()
+
   const pagesTotalCount = Math.ceil(totalCount / count);
   let pages = [];
   for (let i = 1; i <= pagesTotalCount; i++) {
@@ -39,9 +43,12 @@ const Pagination: FC<PaginationProps> = ({
   );
 
   useEffect(() => {
-    onClick(leftPortionPageNumber);
+    changeCurrentPage(leftPortionPageNumber);
   }, [leftPortionPageNumber])
 
+  const changeCurrentPage = (newPage: number) => {
+    dispatch(setCurrentPage(newPage));
+  };
 
   const onClickBack = () => {
     setPortionNumber(portionNumber - 1);
@@ -70,7 +77,7 @@ const Pagination: FC<PaginationProps> = ({
             className={classNames(s.Pagination__PageItem, className, {
               [s.Pagination__PageItemActive]: currentPage === pageItem,
             })}
-            onClick={() => onClick(pageItem)}
+            onClick={() => changeCurrentPage(pageItem)}
           >
             {pageItem}
           </span>

@@ -1,27 +1,40 @@
 import React, { FC } from "react";
 import { useForm, Controller } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
+import { get } from "lodash";
 
 import TextArea from "../../../common/TextArea/TextArea";
 
-interface DialogFormProps {
-  onSubmit: (values: { newMessage: string }) => void;
+interface DialogFormValues {
+  newMessage: string;
 }
+interface DialogFormProps {
+  onSubmit: (values: DialogFormValues) => void;
+}
+const checkMessageLength = (
+    values: DialogFormValues,
+    errors: {[key: string]: string},
+    code: string
+  ) => {
+    const parameterName = get(values, code);
+    if (
+      (typeof parameterName === "string" && parameterName.trim().length > 300)
+    ) {
+      errors[code] = "The message length cannot be more than 300 characters";
+    }
+  };
 
-
-const schema = yup
-  .object({
-    newMessage: yup.string().max(300, 'The message length cannot be more than 300 characters').required(),
-  })
-  .required();
+const validateMessage = (values: DialogFormValues) => {
+  const errors = {};
+  checkMessageLength(values, errors, 'newMessage')
+  return { values, errors };
+};
 
 const DialogForm: FC<DialogFormProps> = ({ onSubmit }) => {
   const { control, handleSubmit } = useForm({
     defaultValues: {
       newMessage: "",
     },
-    resolver: yupResolver(schema),
+    resolver: validateMessage,
   });
 
   return (

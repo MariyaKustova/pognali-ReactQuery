@@ -1,14 +1,16 @@
 @import './BaseStyles/Variables.module.scss';
 @import './BaseStyles/Mixins.module.scss';
 
-.App__Wrapper {  
-  display: grid;
-  grid-template-areas: "nav content";
-  grid-template-columns: 3fr 9fr;
-  @include wrapper;
-}
+.App {
+  &__Wrapper {
+    display: grid;
+    grid-template-areas: "nav content";
+    grid-template-columns: 3fr 9fr;
+    @include wrapper;
+  }
 
-.App__Content {
-  grid-area: content;
-  padding: 0 30px 30px;
+  &__Content {
+    grid-area: content;
+    padding: 0 30px;
+  }
 }

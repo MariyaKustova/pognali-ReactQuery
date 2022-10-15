@@ -37,7 +37,7 @@ const BaseInput = React.forwardRef(
       onChange,
       invalid,
       autoFocus,
-    } = props;
+    } = props;    
 
     return (
       <div className={classnames(s.BaseInput, className)}>

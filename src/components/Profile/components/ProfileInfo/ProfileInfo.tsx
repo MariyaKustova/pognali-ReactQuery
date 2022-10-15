@@ -1,20 +1,19 @@
 import React, { FC } from "react";
+
 import ProfileStatus from "../ProfileStatus/ProfileStatus";
 import SmartLink from "../../../common/SmartImgLink/SmartImgLink";
 import { getIcon } from "../../helpers";
-import { ProfileInfoProps } from "../../types";
+import { UserProfile } from "../../types";
 
 import s from "../../Profile.module.scss";
 
-const ProfileInfo: FC<ProfileInfoProps> = ({
+const ProfileInfo: FC<UserProfile> = ({
   userId,
   aboutMe,
   lookingForAJob,
   lookingForAJobDescription,
   fullName,
   contacts,
-  status,
-  updateUserStatus,
 }) => {
   return (
     <div className={s.Profile__Wrapper}>
@@ -22,7 +21,7 @@ const ProfileInfo: FC<ProfileInfoProps> = ({
         <div className={s.Profile__ShortInfo}>
           <h2>{fullName || "Здесь будет имя пользователя"}</h2>
           <p>id: {userId || "-"}</p>
-          <ProfileStatus status={status} updateUserStatus={updateUserStatus} />
+          <ProfileStatus />
         </div>
         {lookingForAJob && (
           <div className={s.Profile__Job}>

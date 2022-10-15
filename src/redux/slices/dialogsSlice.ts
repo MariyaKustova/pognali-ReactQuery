@@ -1,8 +1,8 @@
-import { SET_NEW_MESSAGE } from "../action";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface DialogsState {
-  dialogsData: { id: string, name: string }[];
-  messagesData: { id: string, message: string }[];
+  dialogsData: { id: string; name: string }[];
+  messagesData: { id: string; message: string }[];
 }
 
 const initialState: DialogsState = {
@@ -60,28 +60,20 @@ const initialState: DialogsState = {
   ],
 };
 
-const dialogsReducer = (state = initialState, action: any) => {
-  switch (action.type) {
-    case SET_NEW_MESSAGE: {
+const dialogsSlice = createSlice({
+  name: "dialogs",
+  initialState,
+  reducers: {
+    setNewMessage: (state, action: PayloadAction<string>) => {
       const newMessage = {
         id: "7",
         message: action.payload,
       };
-
-      return {
-        ...state,
-        messagesData: [...state.messagesData, newMessage],
-      };
-    }
-
-    default:
-      return state;
-  }
-};
-
-export const setNewMessage = (newMessage: string) => ({
-  type: SET_NEW_MESSAGE,
-  payload: newMessage,
+      state.messagesData.push(newMessage);
+    },
+  },
 });
 
-export default dialogsReducer;
+export const { setNewMessage } = dialogsSlice.actions;
+
+export default dialogsSlice.reducer;

@@ -1,41 +1,35 @@
-import { applyMiddleware, combineReducers, createStore } from "redux";
+import { applyMiddleware } from "redux";
+import { configureStore } from "@reduxjs/toolkit";
 import thunkMiddleWare from "redux-thunk";
-import appReducer, { AppState } from "./reducers/appReducer";
-import authReducer, { AuthState } from "./reducers/authReducer";
-import dialogsReducer, { DialogsState } from "./reducers/dialogsReducer";
-import navbarReducer, { NavbarState } from "./reducers/navbarReducer";
-import profileReducer, { ProfileState } from "./reducers/profileReducer";
-import securityReducer, { SecurityState } from "./reducers/securityReducer";
-import usersReducer, { UsersState } from "./reducers/usersReducer";
+import appReducer from "./slices/appSlice";
+import authReducer from "./slices/authSlice";
+import dialogsReducer from "./slices/dialogsSlice";
+import navbarReducer from "./slices/navbarSlice";
+import profileReducer from "./slices/profileSlice";
+import securityReducer from "./slices/securitySlice";
+import usersReducer from "./slices/usersSlice";
 
-export interface State {
-  profile: ProfileState,
-  dialogs: DialogsState,
-  navbar: NavbarState,
-  usersPage: UsersState,
-  auth: AuthState,
-  security: SecurityState,
-  app: AppState,
-}
-
-const reducers = combineReducers({
-  profile: profileReducer,
-  dialogs: dialogsReducer,
-  navbar: navbarReducer,
-  usersPage: usersReducer,
-  auth: authReducer,
-  security: securityReducer,
-  app: appReducer,
-});
-
-const store = createStore(
-  reducers,
-  // @ts-ignore
-  window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ &&
-    // @ts-ignore
-    window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__(
-      applyMiddleware(thunkMiddleWare)
-    )
+const store = configureStore({
+  reducer: {
+    app: appReducer,
+    auth: authReducer,
+    dialogs: dialogsReducer,
+    navbar: navbarReducer,
+    profile: profileReducer,
+    security: securityReducer,
+    usersPage: usersReducer,
+  },
+},   
+ // @ts-ignore
+ window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ &&
+ // @ts-ignore
+ window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__(
+   applyMiddleware(thunkMiddleWare)
+ )
 );
+
+export type State = ReturnType<typeof store.getState>;
+
+export type AppDispatch = typeof store.dispatch;
 
 export default store;

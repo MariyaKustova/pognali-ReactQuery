@@ -1,17 +1,17 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
+import { AppDispatch, State } from "../../../../redux/reduxStore";
+import { getProfileStatus } from "../../../../redux/selectors.ts/profileSelectors";
+import { updateUserStatus } from "../../../../redux/slices/profileSlice";
 import BaseInput from "../../../common/BaseInput/BaseInput";
 
 import s from "./ProfileStatus.module.scss";
 
-interface ProfileStatusProps {
-  status: string;
-  updateUserStatus: (status: string) => void;
-}
+const ProfileStatus = () => {
+  const status = useSelector((state: State) => getProfileStatus(state));
+  const dispatch = useDispatch<AppDispatch>();
 
-const ProfileStatus: FC<ProfileStatusProps> = ({
-  status,
-  updateUserStatus,
-}) => {
   const [userStatus, setUserStatus] = useState<string>(status);
   const [editMode, setEditMode] = useState<boolean>(false);
 
@@ -24,7 +24,7 @@ const ProfileStatus: FC<ProfileStatusProps> = ({
   };
 
   const onChangeStatus = () => {
-    updateUserStatus(userStatus);
+    dispatch(updateUserStatus(userStatus));
     onToggleEditMode();
   };
 

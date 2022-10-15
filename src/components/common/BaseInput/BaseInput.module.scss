@@ -3,35 +3,35 @@
 
 .BaseInput {
   margin-bottom: 15px;
-}
 
-.BaseInput__input {
-  width: 100%;
-  box-sizing: border-box;
-  background-color: transparent;
-  border-radius: 5px;
-  border: 2px solid $light-gold;
-  padding: 5px;
-  @include light-text;
-  color: $light-gold;
-
-  &:hover,
-  &:focus,
-  &:focus-visible {
-    border: 2px solid $mango;
+  &__input {
+    width: 100%;
+    box-sizing: border-box;
+    background-color: transparent;
+    border-radius: 5px;
+    border: 2px solid $light-gold;
+    padding: 5px;
+    @include light-text;
+    color: $light-gold;
+  
+    &:hover,
+    &:focus,
+    &:focus-visible {
+      border: 2px solid $mango;
+    }
+  
+    &:-internal-autofill-selected {
+      background-color: transparent !important;
+    }
   }
-
-  &:-internal-autofill-selected {
-    background-color: transparent !important;
+  
+  &__label {
+    font-size: 24px;
+    line-height: 36px;
+    font-family: "BloggerSans";
   }
-}
-
-.BaseInput__label {
-  font-size: 24px;
-  line-height: 36px;
-  font-family: "BloggerSans";
-}
-
-.BaseInput__inputError {
-  border-color: $mango;
+  
+  &__inputError {
+    border-color: $mango;
+  }
 }
