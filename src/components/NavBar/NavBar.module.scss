@@ -48,6 +48,10 @@
     margin-bottom: 10px;
   }
 
+  &__TitleNotActive {
+    color: $dark-blue-grey-70;
+  }
+
   &__Wrapper {
     display: flex;
     justify-content: space-between;    

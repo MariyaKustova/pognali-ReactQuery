@@ -1,7 +1,7 @@
 import React, { ForwardedRef } from "react";
 import classnames from "classnames";
 
-import { capitalizeFirstLetter } from "../../../helpers/utils";
+import { capitalizeFirstLetter } from "../../../utils";
 
 import s from "./Checkbox.module.scss";
 

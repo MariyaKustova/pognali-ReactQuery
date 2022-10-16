@@ -3,7 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import NavBar from "./components/NavBar/NavBar";
-import MainPage from "./components/MainPage/MainPage";
+import MainPage from "./pages/MainPage/MainPage";
 import { HASH_STAR, ROUTE_PATH } from "./constants";
 import Loader from "./components/common/Loader/Loader";
 import {
@@ -11,10 +11,10 @@ import {
   getInitialized,
 } from "./redux/selectors.ts/appSelectors";
 import Header from "./components/Header/Header";
-import News from "./News/News";
-import Music from "./Music/Music";
-import Settings from "./Settings/Settings";
-import NotFound from "./NotFound/NotFound";
+import News from "./pages/News/News";
+import Music from "./pages/Music/Music";
+import Settings from "./pages/Settings/Settings";
+import NotFound from "./pages/NotFound/NotFound";
 import ErrorModal from "./components/common/ErrorModal/ErrorModal";
 import { initApp, setAppErrors } from "./redux/slices/appSlice";
 import { AppDispatch, State } from "./redux/reduxStore";
@@ -22,10 +22,10 @@ import { ProtectedRoute } from "./components/common/ProtectedRoute";
 
 import s from "./App.module.scss";
 
-const Dialogs = React.lazy(() => import("./components/Dialogs/Dialogs"));
-const Users = React.lazy(() => import("./components/Users/Users"));
-const Profile = React.lazy(() => import("./components/Profile/Profile"));
-const Login = React.lazy(() => import("./components/Login/Login"));
+const Dialogs = React.lazy(() => import("./pages/Dialogs/Dialogs"));
+const Users = React.lazy(() => import("./pages/Users/Users"));
+const Profile = React.lazy(() => import("./pages/Profile/Profile"));
+const Login = React.lazy(() => import("./pages/Login/Login"));
 
 const App = () => {
   const initialized = useSelector((state: State) => getInitialized(state));
@@ -49,7 +49,6 @@ const App = () => {
   const hideModal = () => {
     dispatch(setAppErrors(null));
   };
-
   
     return !initialized ? (
       <Loader />

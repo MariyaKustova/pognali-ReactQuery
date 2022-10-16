@@ -4,7 +4,7 @@ import s from "./ErrorModal.module.scss";
 
 interface ErrorModalProps {
   message: string;
-  onClick: () => void;
+  onClick?: () => void;
 }
 
 const ErrorModal: FC<ErrorModalProps> = ({ message, onClick }) => {

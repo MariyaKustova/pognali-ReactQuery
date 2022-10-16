@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
-import { authAPI } from "../../API/auth";
-import { profileAPI } from "../../API/profile";
-import { UserProfile } from "../../components/Profile/types";
+import { authAPI } from "../API/auth";
+import { profileAPI } from "../API/profile";
+import { UserProfile } from "../../pages/Profile/types";
 import { AppDispatch } from "../reduxStore";
 import { setAppErrors } from "./appSlice";
 

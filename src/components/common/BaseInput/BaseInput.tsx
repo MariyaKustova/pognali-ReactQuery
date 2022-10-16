@@ -5,7 +5,7 @@ import { has } from "lodash";
 import {
   capitalizeFirstLetter,
   editName,
-} from "../../../helpers/utils";
+} from "../../../utils";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
 
 import s from "./BaseInput.module.scss";

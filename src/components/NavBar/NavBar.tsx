@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
+import classnames from "classnames";
 
 import { routes } from "../../constants";
 import FriendItem from "./FriendItem/FriendItem";
@@ -33,10 +34,12 @@ const NavBar = () => {
             </NavLink>
           </li>
         ))}
-        {friends.length && (
-          <li>
-            <div className={s.NavBar__FriendsSection}>
-              <div className={s.NavBar__Title}>Friends</div>
+        <li>
+          <div className={s.NavBar__FriendsSection}>
+            <div className={classnames(s.NavBar__Title, {
+              [s.NavBar__TitleNotActive]: !friends.length,
+            })}>Friends online</div>
+            {friends.length ? (
               <div className={s.NavBar__Wrapper}>
                 {friends.map((friend) => (
                   <FriendItem
@@ -46,9 +49,9 @@ const NavBar = () => {
                   />
                 ))}
               </div>
-            </div>
-          </li>
-        )}
+            ) : null}
+          </div>
+        </li>
       </ul>
     </nav>
   );

@@ -1,13 +1,14 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { authAPI } from "../../API/auth";
-import { securityAPI } from "../../API/security";
+import { authAPI } from "../API/auth";
+import { securityAPI } from "../API/security";
 import {
   requestLoginData,
   ResponseCaptcha,
+  ResponseDataBase,
   ResponseLogin,
   ResponseLogout,
-} from "../../components/Login/types";
+} from "../../pages/Login/types";
 import { AppDispatch } from "../reduxStore";
 import { authUser, setCurrentUser, setUserData } from "./authSlice";
 
@@ -40,7 +41,7 @@ requestLoginData,
 >(
   "security/loginUser",
   async function (requestData, { dispatch }) {
-    const data: ResponseLogin = await authAPI.login(requestData);
+    const data: ResponseDataBase<ResponseLogin> = await authAPI.login(requestData);
     switch (String(data.resultCode)) {
       case "0":
         dispatch(authUser());
@@ -67,7 +68,7 @@ void,
 >(
   "security/logoutUser",
   async function (_, { dispatch }) {
-    const data: ResponseLogout = await authAPI.logout();
+    const data: ResponseDataBase<ResponseLogout> = await authAPI.logout();
     if (data.resultCode === 0) {
       dispatch(
         setUserData({ id: null, email: null, login: null, isAuth: false })

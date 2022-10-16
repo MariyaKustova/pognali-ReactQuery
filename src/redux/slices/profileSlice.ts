@@ -1,18 +1,22 @@
 import { AppDispatch, State } from "./../reduxStore";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+
 import {
   Post,
   ProfileFormValues,
   UserPhotos,
   UserProfile,
-} from "../../components/Profile/types";
-import { profileAPI } from "../../API/profile";
+} from "../../pages/Profile/types";
+import { profileAPI } from "../API/profile";
 import { setErrorMessage } from "./securitySlice";
+import { setErrors, setSuccess } from "./helpers";
 
 export interface ProfileState {
   postsData: Post[];
   userProfile: UserProfile | null;
   status: string;
+  error: string | null | undefined;
+  isFetching: boolean;
 }
 
 const initialState: ProfileState = {
@@ -50,15 +54,17 @@ const initialState: ProfileState = {
   ],
   userProfile: null,
   status: "",
+  error: null,
+  isFetching: false,
 };
 
 export const getProfile = createAsyncThunk<
   void,
   number,
   { dispatch: AppDispatch }
->("profile/getProfile", async function (userId, { dispatch }) {
-  const data = await profileAPI.getProfile(Number(userId));
-  dispatch(setUserProfile(data));
+>("profile/getProfile", async function (userId, { dispatch, rejectWithValue }) {
+    const data = await profileAPI.getProfile(Number(userId));
+    dispatch(setUserProfile(data));
 });
 
 export const getUserStatus = createAsyncThunk<
@@ -129,6 +135,29 @@ const profileSlice = createSlice({
         photos: action.payload,
       };
     },
+  },  
+  extraReducers: (builder) => {
+    builder
+      .addCase(getProfile.fulfilled, setSuccess)
+      .addCase(getProfile.rejected, (state, action) => {
+        setErrors(state, "Server Error! Could not get a profile!");
+      })
+      .addCase(getUserStatus.fulfilled, (state) => setSuccess(state))
+      .addCase(getUserStatus.rejected, (state) => {
+        setErrors(state, "Server error! Could not get a status!");
+      })
+      .addCase(updateUserStatus.fulfilled, setSuccess)
+      .addCase(updateUserStatus.rejected, (state) => {
+        setErrors(state, "Server error! Failed to update status!");
+      })
+      .addCase(savePhoto.fulfilled, setSuccess)
+      .addCase(savePhoto.rejected, (state) => {
+        setErrors(state, "Server error! Failed to save photo!");
+      })
+      .addCase(saveProfile.fulfilled, setSuccess)
+      .addCase(saveProfile.rejected, (state) => {
+        setErrors(state, "Server error! Failed to save profile!");
+      })
   },
 });
 

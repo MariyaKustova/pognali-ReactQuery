@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { usersAPI } from "../../API/users";
-import { User, UsersResponse } from "../../components/Users/types";
+import { usersAPI } from "../API/users";
+import { User, UsersResponse } from "../../pages/Users/types";
 import { AppDispatch } from "../reduxStore";
 
 export interface NavbarState {
