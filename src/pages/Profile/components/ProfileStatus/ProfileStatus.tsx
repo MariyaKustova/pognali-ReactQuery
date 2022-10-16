@@ -1,19 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import classnames from "classnames";
 
 import { AppDispatch, State } from "../../../../redux/reduxStore";
-import { getProfileStatus } from "../../../../redux/selectors.ts/profileSelectors";
+import { getProfileState } from "../../../../redux/selectors.ts/profileSelectors";
 import { updateUserStatus } from "../../../../redux/slices/profileSlice";
 import BaseInput from "../../../../components/common/BaseInput/BaseInput";
+import { getCurrentUser } from "../../../../redux/selectors.ts/authSelectors";
 
 import s from "./ProfileStatus.module.scss";
 
 const ProfileStatus = () => {
-  const status = useSelector((state: State) => getProfileStatus(state));
+  const currentUser = useSelector((state: State) => getCurrentUser(state));
+  const { status, userProfile } = useSelector((state: State) => getProfileState(state));
   const dispatch = useDispatch<AppDispatch>();
 
   const [userStatus, setUserStatus] = useState<string>(status);
   const [editMode, setEditMode] = useState<boolean>(false);
+
+  const isOwner = userProfile?.userId === currentUser?.userId;
 
   useEffect(() => {
     setUserStatus(status);
@@ -29,8 +34,10 @@ const ProfileStatus = () => {
   };
 
   return (
-    <div className={s.ProfileStatus}>
-      {editMode ? (
+    <div className={classnames(s.ProfileStatus, {
+      [s.ProfileStatus__Owner]: isOwner,
+    })}>
+      {editMode && isOwner ? (
         <div className={s.ProfileStatus__Modal}>
           <span className={s.ProfileStatus__Hint}>Введите ваш статус</span>
           <BaseInput

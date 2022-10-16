@@ -1,6 +1,6 @@
-@import '../../../../../BaseStyles/Variables.module.scss';
-@import '../../../../../BaseStyles/Fonts.module.scss';
-@import '../../../../../BaseStyles/Mixins.module.scss';
+@import '../../../../../assets/BaseStyles/Variables.module.scss';
+@import '../../../../../assets/BaseStyles/Fonts.module.scss';
+@import '../../../../../assets/BaseStyles/Mixins.module.scss';
 
 .Post {
   @include light-text();

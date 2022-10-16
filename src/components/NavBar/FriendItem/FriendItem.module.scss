@@ -1,6 +1,6 @@
-@import '../../../BaseStyles/Fonts.module.scss';
-@import '../../../BaseStyles/Variables.module.scss';
-@import '../../../BaseStyles/Mixins.module.scss';
+@import '../../../assets/BaseStyles/Fonts.module.scss';
+@import '../../../assets/BaseStyles/Variables.module.scss';
+@import '../../../assets/BaseStyles/Mixins.module.scss';
 
 .FriendItem {
   @include light-text-link;

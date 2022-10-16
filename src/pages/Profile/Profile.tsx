@@ -27,7 +27,6 @@ const Profile = () => {
   const {
     userProfile,
     error: profileError,
-    isFetching,
   } = useSelector((state: State) => getProfileState(state));
 
   const currentUser = useSelector((state: State) => getCurrentUser(state));
