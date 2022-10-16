@@ -35,7 +35,7 @@ export const profileAPI = {
   },
   saveProfile(profile: ProfileFormValues) {
     return instanceAxios
-      .put(`profile1`, profile)
+      .put(`profile`, profile)
       .then((response) => response.data);
   }
 };
