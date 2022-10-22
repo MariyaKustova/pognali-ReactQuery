@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import { ROUTE_PATH } from "../../constants";
 import IconUser from "../../assets/images/user-icon.svg";
-import { getCurrentUser, getIsAuth } from "../../redux/selectors.ts/authSelectors";
+import {
+  getCurrentUser,
+  getIsAuth,
+} from "../../redux/selectors.ts/authSelectors";
 import { logoutUser } from "../../redux/slices/securitySlice";
 import { AppDispatch } from "../../redux/reduxStore";
 
@@ -15,9 +18,9 @@ const Header = () => {
   const currentUser = useSelector(getCurrentUser);
   const dispatch = useDispatch<AppDispatch>();
 
-  const onClick = () => {
+  const onClick = useCallback(() => {
     dispatch(logoutUser());
-  }
+  }, [dispatch]);
 
   return (
     <header className={s.Header}>
@@ -74,10 +77,7 @@ const Header = () => {
         <div className={s.Header__rightContent}>
           {isAuth ? (
             <>
-              <button
-                className={s.Header__btnLogout}
-                onClick={onClick}
-              >
+              <button className={s.Header__btnLogout} onClick={onClick}>
                 Log out
               </button>
               <Link to={`${ROUTE_PATH.PROFILE}`}>

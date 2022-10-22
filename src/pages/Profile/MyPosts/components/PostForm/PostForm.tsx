@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useCallback } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -28,10 +28,13 @@ const PostForm: FC<PostFormProps> = ({ onSubmit }) => {
     resolver: yupResolver(schema),
   });
 
-  const onHandleSubmit = (values: { newPost: string }) => {
-    onSubmit(values);
-    reset(defaultValues);
-  };
+  const onHandleSubmit = useCallback(
+    (values: { newPost: string }) => {
+      onSubmit(values);
+      reset(defaultValues);
+    },
+    [onSubmit, reset]
+  );
 
   return (
     <form onSubmit={handleSubmit(onHandleSubmit)}>

@@ -23,60 +23,53 @@ const initialState: SecurityState = {
 };
 
 export const getCaptchaUrl = createAsyncThunk<
-void,
-void,
-{ dispatch: AppDispatch }
->(
-  "security/getCaptchaUrl",
-  async function (_, { dispatch }) {
-    const data: ResponseCaptcha = await securityAPI.getCaptchaUrl();
-    dispatch(setCapthaUrl(data.url));
-  }
-);
+  void,
+  void,
+  { dispatch: AppDispatch }
+>("security/getCaptchaUrl", async function (_, { dispatch }) {
+  const data: ResponseCaptcha = await securityAPI.getCaptchaUrl();
+  dispatch(setCapthaUrl(data.url));
+});
 
 export const loginUser = createAsyncThunk<
-void,
-requestLoginData,
-{ dispatch: AppDispatch }
->(
-  "security/loginUser",
-  async function (requestData, { dispatch }) {
-    const data: ResponseDataBase<ResponseLogin> = await authAPI.login(requestData);
-    switch (String(data.resultCode)) {
-      case "0":
-        dispatch(authUser());
-        dispatch(setCapthaUrl(null));
-        dispatch(setErrorMessage(null));
-        break;
-      case "1":
-        dispatch(setErrorMessage(data.messages));
-        break;
-      case "10":
-        dispatch(setErrorMessage(data.messages));
-        dispatch(getCaptchaUrl());
-        break;
-      default:
-        break;
-    }
+  void,
+  requestLoginData,
+  { dispatch: AppDispatch }
+>("security/loginUser", async function (requestData, { dispatch }) {
+  const data: ResponseDataBase<ResponseLogin> = await authAPI.login(
+    requestData
+  );
+  switch (String(data.resultCode)) {
+    case "0":
+      dispatch(authUser());
+      dispatch(setCapthaUrl(null));
+      dispatch(setErrorMessage(null));
+      break;
+    case "1":
+      dispatch(setErrorMessage(data.messages));
+      break;
+    case "10":
+      dispatch(setErrorMessage(data.messages));
+      dispatch(getCaptchaUrl());
+      break;
+    default:
+      break;
   }
-);
+});
 
 export const logoutUser = createAsyncThunk<
-void,
-void,
-{ dispatch: AppDispatch }
->(
-  "security/logoutUser",
-  async function (_, { dispatch }) {
-    const data: ResponseDataBase<ResponseLogout> = await authAPI.logout();
-    if (data.resultCode === 0) {
-      dispatch(
-        setUserData({ id: null, email: null, login: null, isAuth: false })
-      );
-      dispatch(setCurrentUser(null));
-    }
+  void,
+  void,
+  { dispatch: AppDispatch }
+>("security/logoutUser", async function (_, { dispatch }) {
+  const data: ResponseDataBase<ResponseLogout> = await authAPI.logout();
+  if (data.resultCode === 0) {
+    dispatch(
+      setUserData({ id: null, email: null, login: null, isAuth: false })
+    );
+    dispatch(setCurrentUser(null));
   }
-);
+});
 
 const securitySlice = createSlice({
   name: "security",

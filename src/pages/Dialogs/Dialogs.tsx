@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import DialogItem from "./components/DialogItem/DialogItem";
@@ -16,9 +16,9 @@ const Dialogs = () => {
   const messagesData = useSelector((state: State) => getMessagesData(state));
   const dispatch = useDispatch<AppDispatch>();
   
-  const onSubmit = (values: {newMessage: string}) => {
+  const onSubmit = useCallback((values: {newMessage: string}) => {
     values.newMessage.length && dispatch(setNewMessage(values.newMessage));
-  };
+  }, [dispatch]);
 
   return (
     <div className={s.Dialogs}>

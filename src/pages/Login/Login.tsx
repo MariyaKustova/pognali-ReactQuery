@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
 
@@ -21,10 +21,13 @@ const Login: () => JSX.Element = () => {
   const errorMessages = useSelector((state: State) => getErrorMessages(state));
   const dispatch = useDispatch<AppDispatch>();
 
-  const onSubmit = (values: LoginFormValues) => {
-    const { login, password, rememberMe, captcha } = values;
-    dispatch(loginUser({ email: login, password, rememberMe, captcha }));
-  };
+  const onSubmit = useCallback(
+    (values: LoginFormValues) => {
+      const { login, password, rememberMe, captcha } = values;
+      dispatch(loginUser({ email: login, password, rememberMe, captcha }));
+    },
+    [dispatch]
+  );
 
   if (isAuth) return <Navigate to={ROUTE_PATH.MAIN} />;
 

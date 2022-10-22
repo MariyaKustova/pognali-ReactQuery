@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import classnames from "classnames";
 
@@ -12,31 +12,38 @@ import s from "./ProfileStatus.module.scss";
 
 const ProfileStatus = () => {
   const currentUser = useSelector((state: State) => getCurrentUser(state));
-  const { status, userProfile } = useSelector((state: State) => getProfileState(state));
+  const { status, userProfile } = useSelector((state: State) =>
+    getProfileState(state)
+  );
   const dispatch = useDispatch<AppDispatch>();
 
   const [userStatus, setUserStatus] = useState<string>(status);
   const [editMode, setEditMode] = useState<boolean>(false);
 
-  const isOwner = userProfile?.userId === currentUser?.userId;
+  const isOwner = useMemo(
+    () => userProfile?.userId === currentUser?.userId,
+    [userProfile, currentUser]
+  );
 
   useEffect(() => {
     setUserStatus(status);
   }, [status]);
 
-  const onToggleEditMode = () => {  
+  const onToggleEditMode = useCallback(() => {
     setEditMode((prevState) => !prevState);
-  };
+  }, []);
 
-  const onChangeStatus = () => {
+  const onChangeStatus = useCallback(() => {
     dispatch(updateUserStatus(userStatus));
     onToggleEditMode();
-  };
+  }, [dispatch, onToggleEditMode, userStatus]);
 
   return (
-    <div className={classnames(s.ProfileStatus, {
-      [s.ProfileStatus__Owner]: isOwner,
-    })}>
+    <div
+      className={classnames(s.ProfileStatus, {
+        [s.ProfileStatus__Owner]: isOwner,
+      })}
+    >
       {editMode && isOwner ? (
         <div className={s.ProfileStatus__Modal}>
           <span className={s.ProfileStatus__Hint}>Введите ваш статус</span>

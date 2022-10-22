@@ -63,8 +63,8 @@ export const getProfile = createAsyncThunk<
   number,
   { dispatch: AppDispatch }
 >("profile/getProfile", async function (userId, { dispatch, rejectWithValue }) {
-    const data = await profileAPI.getProfile(Number(userId));
-    dispatch(setUserProfile(data));
+  const data = await profileAPI.getProfile(Number(userId));
+  dispatch(setUserProfile(data));
 });
 
 export const getUserStatus = createAsyncThunk<
@@ -135,7 +135,7 @@ const profileSlice = createSlice({
         photos: action.payload,
       };
     },
-  },  
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getProfile.fulfilled, setSuccess)
@@ -157,7 +157,7 @@ const profileSlice = createSlice({
       .addCase(saveProfile.fulfilled, setSuccess)
       .addCase(saveProfile.rejected, (state) => {
         setErrors(state, "Server error! Failed to save profile!");
-      })
+      });
   },
 });
 

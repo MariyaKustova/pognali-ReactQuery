@@ -11,8 +11,7 @@ interface ButtonProps {
   disabled?: boolean;
 }
 
-const Button: FC<ButtonProps> = (props) => {
-  const { className, onClick, disabled, label, type } = props;
+const Button: FC<ButtonProps> = ({ className, onClick, disabled, label, type }) => {
   return (
     <button
       className={classnames(s.Button, className)}

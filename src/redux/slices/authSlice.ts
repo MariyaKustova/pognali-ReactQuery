@@ -27,11 +27,7 @@ const initialState: AuthState = {
   currentUser: null,
 };
 
-export const authUser = createAsyncThunk<
-void,
-void,
-{ dispatch: AppDispatch }
->(
+export const authUser = createAsyncThunk<void, void, { dispatch: AppDispatch }>(
   "auth/authUser",
   async function (_, { fulfillWithValue, dispatch }) {
     try {

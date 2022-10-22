@@ -12,7 +12,14 @@ import { follow, unfollow } from "../../redux/slices/usersSlice";
 
 import s from "./UserItem.module.scss";
 
-const UserItem: FC<User> = ({ id, name, photos, location, status, followed }) => {
+const UserItem: FC<User> = ({
+  id,
+  name,
+  photos,
+  location,
+  status,
+  followed,
+}) => {
   const followingInProgress = useSelector((state: State) =>
     getFollowingInProgress(state)
   );

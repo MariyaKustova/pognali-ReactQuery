@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -24,20 +24,22 @@ import ErrorAlert from "../../components/common/ErrorAlert/ErrorAlert";
 import s from "./Profile.module.scss";
 
 const Profile = () => {
-  const {
-    userProfile,
-    error: profileError,
-  } = useSelector((state: State) => getProfileState(state));
+  const { userProfile, error: profileError } = useSelector((state: State) =>
+    getProfileState(state)
+  );
 
   const currentUser = useSelector((state: State) => getCurrentUser(state));
   const dispatch = useDispatch<AppDispatch>();
   const params = useParams();
   const navigate = useNavigate();
 
-  const isOwner = userProfile?.userId === currentUser?.userId;
+  const isOwner = useMemo(
+    () => userProfile?.userId === currentUser?.userId,
+    [userProfile, currentUser]
+  );
   const [editMode, setEditMode] = useState<boolean>(false);
 
-  const refreshProfile = () => {
+  const refreshProfile = useCallback(() => {
     const userId: string | number | undefined =
       params.userId || currentUser?.userId;
 
@@ -47,7 +49,7 @@ const Profile = () => {
     } else {
       navigate(ROUTE_PATH.MAIN);
     }
-  };
+  }, [dispatch, navigate, params.userId, currentUser]);
 
   useEffect(() => {
     refreshProfile();
@@ -55,16 +57,22 @@ const Profile = () => {
 
   useEffect(() => {
     refreshProfile();
-  }, [params.userId]);
+  }, [params.userId, refreshProfile]);
 
-  const onPhotoDownload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.currentTarget.files) dispatch(savePhoto(e.currentTarget.files[0]));
-  };
+  const onPhotoDownload = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (e.currentTarget.files) dispatch(savePhoto(e.currentTarget.files[0]));
+    },
+    [dispatch]
+  );
 
-  const onSubmit = (values: ProfileFormValues) => {
-    dispatch(saveProfile(values));
-    setEditMode(false);
-  };
+  const onSubmit = useCallback(
+    (values: ProfileFormValues) => {
+      dispatch(saveProfile(values));
+      setEditMode(false);
+    },
+    [dispatch]
+  );
 
   return (
     <>

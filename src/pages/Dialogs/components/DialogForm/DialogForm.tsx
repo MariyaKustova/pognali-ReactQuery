@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useCallback } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { get } from "lodash";
 
@@ -11,21 +11,19 @@ interface DialogFormProps {
   onSubmit: (values: DialogFormValues) => void;
 }
 const checkMessageLength = (
-    values: DialogFormValues,
-    errors: {[key: string]: string},
-    code: string
-  ) => {
-    const parameterName = get(values, code);
-    if (
-      (typeof parameterName === "string" && parameterName.trim().length > 300)
-    ) {
-      errors[code] = "The message length cannot be more than 300 characters";
-    }
-  };
+  values: DialogFormValues,
+  errors: { [key: string]: string },
+  code: string
+) => {
+  const parameterName = get(values, code);
+  if (typeof parameterName === "string" && parameterName.trim().length > 300) {
+    errors[code] = "The message length cannot be more than 300 characters";
+  }
+};
 
 const validateMessage = (values: DialogFormValues) => {
   const errors = {};
-  checkMessageLength(values, errors, 'newMessage')
+  checkMessageLength(values, errors, "newMessage");
   return { values, errors };
 };
 
@@ -35,14 +33,17 @@ const defaultValues = {
 
 const DialogForm: FC<DialogFormProps> = ({ onSubmit }) => {
   const { control, handleSubmit, reset } = useForm({
-    defaultValues, 
+    defaultValues,
     resolver: validateMessage,
   });
 
-  const onHandleSubmit = (values: DialogFormValues) => {
-    onSubmit(values);
-    reset(defaultValues);
-  }
+  const onHandleSubmit = useCallback(
+    (values: DialogFormValues) => {
+      onSubmit(values);
+      reset(defaultValues);
+    },
+    [onSubmit, reset]
+  );
 
   return (
     <form onSubmit={handleSubmit(onHandleSubmit)}>

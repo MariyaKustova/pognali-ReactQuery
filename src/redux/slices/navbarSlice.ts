@@ -13,7 +13,7 @@ const initialState: NavbarState = {
 
 export const getFriends = createAsyncThunk<
   void,
-  { currentPage?: number; pageSize?: number},
+  { currentPage?: number; pageSize?: number },
   { dispatch: AppDispatch }
 >(
   "navbar/getFriends",

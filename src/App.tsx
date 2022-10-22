@@ -1,4 +1,4 @@
-import React, { Fragment, Suspense, useEffect } from "react";
+import React, { Fragment, Suspense, useCallback, useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -32,9 +32,12 @@ const App = () => {
   const errorsMessage = useSelector((state: State) => getErrorsMessage(state));
   const dispatch = useDispatch<AppDispatch>();
 
-  const catchAllUnhandledErrors = (e: PromiseRejectionEvent) => {
-    dispatch(setAppErrors(e.reason.message));
-  };
+  const catchAllUnhandledErrors = useCallback(
+    (e: PromiseRejectionEvent) => {
+      dispatch(setAppErrors(e.reason.message));
+    },
+    [dispatch]
+  );
 
   useEffect(() => {
     dispatch(initApp());
@@ -44,61 +47,58 @@ const App = () => {
       "unhandledrejection",
       catchAllUnhandledErrors
     );
-  }, [])
+  }, []);
 
-  const hideModal = () => {
+  const hideModal = useCallback(() => {
     dispatch(setAppErrors(null));
-  };
-  
-    return !initialized ? (
-      <Loader />
-    ) : (
-      <Fragment>
-        <Header />
-        <div className={s.App__Wrapper}>
-          <NavBar />
-          <div className={s.App__Content}>
-            <Suspense fallback={<Loader />}>
-              <Routes>
-                <Route path={ROUTE_PATH.MAIN} element={<MainPage />} />
-                <Route path={ROUTE_PATH.PROFILE} element={<Profile />}>
-                  <Route
-                    path={`${ROUTE_PATH.PROFILE}:userId`}
-                    element={<Profile />}
-                  />
-                </Route>
+  }, [dispatch]);
+
+  return !initialized ? (
+    <Loader />
+  ) : (
+    <Fragment>
+      <Header />
+      <div className={s.App__Wrapper}>
+        <NavBar />
+        <div className={s.App__Content}>
+          <Suspense fallback={<Loader />}>
+            <Routes>
+              <Route path={ROUTE_PATH.MAIN} element={<MainPage />} />
+              <Route path={ROUTE_PATH.PROFILE} element={<Profile />}>
                 <Route
-                  path={`${ROUTE_PATH.DIALOGS}${HASH_STAR}`}
-                  element={
-                    <ProtectedRoute>
-                      <Dialogs />
-                    </ProtectedRoute>
-                  }
+                  path={`${ROUTE_PATH.PROFILE}:userId`}
+                  element={<Profile />}
                 />
-                <Route path={`${ROUTE_PATH.USERS}`} element={<Users />} />
-                <Route path={`${ROUTE_PATH.NEWS}`} element={<News />} />
-                <Route path={`${ROUTE_PATH.MUSIC}`} element={<Music />} />
-                <Route
-                  path={`${ROUTE_PATH.SETTINGS}`}
-                  element={
-                    <ProtectedRoute>
-                      <Settings />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route path={`${ROUTE_PATH.LOGIN}`} element={<Login />} />
-                <Route path={`*`} element={<NotFound />} />
-              </Routes>
-            </Suspense>
-          </div>
+              </Route>
+              <Route
+                path={`${ROUTE_PATH.DIALOGS}${HASH_STAR}`}
+                element={
+                  <ProtectedRoute>
+                    <Dialogs />
+                  </ProtectedRoute>
+                }
+              />
+              <Route path={`${ROUTE_PATH.USERS}`} element={<Users />} />
+              <Route path={`${ROUTE_PATH.NEWS}`} element={<News />} />
+              <Route path={`${ROUTE_PATH.MUSIC}`} element={<Music />} />
+              <Route
+                path={`${ROUTE_PATH.SETTINGS}`}
+                element={
+                  <ProtectedRoute>
+                    <Settings />
+                  </ProtectedRoute>
+                }
+              />
+              <Route path={`${ROUTE_PATH.LOGIN}`} element={<Login />} />
+              <Route path={`*`} element={<NotFound />} />
+            </Routes>
+          </Suspense>
         </div>
-        {errorsMessage && (
-          <ErrorModal
-            message={errorsMessage}
-            onClick={hideModal}
-          />
-        )}
-      </Fragment>
-    );
-  }
+      </div>
+      {errorsMessage && (
+        <ErrorModal message={errorsMessage} onClick={hideModal} />
+      )}
+    </Fragment>
+  );
+};
 export default App;

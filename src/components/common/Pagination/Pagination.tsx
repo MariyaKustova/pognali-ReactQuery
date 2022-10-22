@@ -1,9 +1,12 @@
-import React, { FC, useEffect, useMemo, useState } from "react";
+import React, { FC, useCallback, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import classNames from "classnames";
 
 import { AppDispatch, State } from "../../../redux/reduxStore";
-import { getCurrentPage, getTotalCount } from "../../../redux/selectors.ts/usersSelectors";
+import {
+  getCurrentPage,
+  getTotalCount,
+} from "../../../redux/selectors.ts/usersSelectors";
 import { setCurrentPage } from "../../../redux/slices/usersSlice";
 
 import s from "./Pagination.module.scss";
@@ -22,17 +25,20 @@ const Pagination: FC<PaginationProps> = ({
   const totalCount = useSelector((state: State) => getTotalCount(state));
   const currentPage = useSelector((state: State) => getCurrentPage(state));
 
-  const dispatch = useDispatch<AppDispatch>()
+  const dispatch = useDispatch<AppDispatch>();
 
   const pagesTotalCount = Math.ceil(totalCount / count);
   let pages = [];
   for (let i = 1; i <= pagesTotalCount; i++) {
     pages.push(i);
   }
-  const pagesPortionCount = Math.ceil(pagesTotalCount / portionSize);
-  
+  const pagesPortionCount = useMemo(
+    () => Math.ceil(pagesTotalCount / portionSize),
+    [pagesTotalCount, portionSize]
+  );
+
   const [portionNumber, setPortionNumber] = useState<number>(1);
-  
+
   const leftPortionPageNumber = useMemo(
     () => (portionNumber - 1) * portionSize + 1,
     [portionNumber, portionSize]
@@ -42,21 +48,24 @@ const Pagination: FC<PaginationProps> = ({
     [portionNumber, portionSize]
   );
 
+  const changeCurrentPage = useCallback(
+    (newPage: number) => {
+      dispatch(setCurrentPage(newPage));
+    },
+    [dispatch]
+  );
+
   useEffect(() => {
     changeCurrentPage(leftPortionPageNumber);
-  }, [leftPortionPageNumber])
+  }, [leftPortionPageNumber, changeCurrentPage]);
 
-  const changeCurrentPage = (newPage: number) => {
-    dispatch(setCurrentPage(newPage));
-  };
-
-  const onClickBack = () => {
+  const onClickBack = useCallback(() => {
     setPortionNumber(portionNumber - 1);
-  };
+  }, [portionNumber]);
 
-  const onClickNext = () => {
+  const onClickNext = useCallback(() => {
     setPortionNumber(portionNumber + 1);
-  };
+  }, [portionNumber]);
 
   return (
     <div className={s.Pagination}>

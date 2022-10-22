@@ -12,15 +12,11 @@ const initialState: AppState = {
   errors: null,
 };
 
-export const initApp = createAsyncThunk<
-void,
-void,
-{ dispatch: AppDispatch }
->(
+export const initApp = createAsyncThunk<void, void, { dispatch: AppDispatch }>(
   "app/initApp",
   async function (_, { dispatch }) {
-      const promise = dispatch(authUser());
-      Promise.all([promise]).then(() => dispatch(appInitSuccess()));
+    const promise = dispatch(authUser());
+    Promise.all([promise]).then(() => dispatch(appInitSuccess()));
   }
 );
 

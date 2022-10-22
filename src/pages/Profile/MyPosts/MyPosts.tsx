@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import PostItem from "./components/PostItem/PostItem";
@@ -13,9 +13,12 @@ import s from "./MyPosts.module.scss";
 const MyPosts = () => {
   const posts = useSelector((state: State) => getPostsData(state));
   const dispatch = useDispatch();
-  const onSubmit = (values: { newPost: string }) => {
-    values.newPost.length && dispatch(setNewPost(values.newPost));
-  };
+  const onSubmit = useCallback(
+    (values: { newPost: string }) => {
+      values.newPost.length && dispatch(setNewPost(values.newPost));
+    },
+    [dispatch]
+  );
 
   return (
     <Fragment>
