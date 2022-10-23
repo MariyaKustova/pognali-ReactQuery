@@ -26,7 +26,7 @@ const initialState: UsersState = {
 export const getUsers = createAsyncThunk<
   void,
   { currentPage: number; pageSize: number },
-  { dispatch: AppDispatch; rejectWithValue: any }
+  { dispatch: AppDispatch }
 >(
   "users/getUsers",
   async function ({ currentPage = 1, pageSize = 5 }, { dispatch }) {

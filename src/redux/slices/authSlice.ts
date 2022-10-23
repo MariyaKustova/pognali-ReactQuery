@@ -29,7 +29,7 @@ const initialState: AuthState = {
 
 export const authUser = createAsyncThunk<void, void, { dispatch: AppDispatch }>(
   "auth/authUser",
-  async function (_, { fulfillWithValue, dispatch }) {
+  async function (_, { dispatch }) {
     try {
       const data = await authAPI.auth();
       if (data.resultCode === 0) {
