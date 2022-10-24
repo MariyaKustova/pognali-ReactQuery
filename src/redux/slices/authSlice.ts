@@ -41,8 +41,10 @@ export const authUser = createAsyncThunk<void, void, { dispatch: AppDispatch }>(
       } else {
         throw new Error(data.messages[0]);
       }
-    } catch (error: any) {
-      dispatch(setAppErrors(error.message));
+    } catch (error) {
+      if (error instanceof Error) {
+        dispatch(setAppErrors(error.message));
+      }
     }
   }
 );
