@@ -9,9 +9,15 @@ interface ErrorMessageProps {
   message: FieldError | string;
 }
 
+// type Guard
+
+const isString = (message: FieldError | string): message is string => {
+  return typeof message === "string";
+};
+
 const ErrorMessage: FC<ErrorMessageProps> = ({ message }) => {
   const errorMessage = useMemo(() => {
-    if (typeof message === "string") {
+    if (isString(message)) {
       return message;
     }
     return message.message;
