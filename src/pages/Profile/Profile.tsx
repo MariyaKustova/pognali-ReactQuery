@@ -44,8 +44,8 @@ const Profile = () => {
       params.userId || currentUser?.userId;
 
     if (userId) {
-      dispatch(getProfile(Number(userId)));
-      dispatch(getUserStatus(Number(userId)));
+      dispatch(getProfile(+userId));
+      dispatch(getUserStatus(+userId));
     } else {
       navigate(ROUTE_PATH.MAIN);
     }

@@ -63,7 +63,7 @@ export const getProfile = createAsyncThunk<
   number,
   { dispatch: AppDispatch }
 >("profile/getProfile", async function (userId, { dispatch, rejectWithValue }) {
-  const data = await profileAPI.getProfile(Number(userId));
+  const data = await profileAPI.getProfile(+userId);
   dispatch(setUserProfile(data));
 });
 
@@ -72,7 +72,7 @@ export const getUserStatus = createAsyncThunk<
   number,
   { dispatch: AppDispatch }
 >("profile/getUserStatus", async function (userId, { dispatch }) {
-  const data = await profileAPI.getStatus(Number(userId));
+  const data = await profileAPI.getStatus(+userId);
   dispatch(setUserStatus(data));
 });
 
