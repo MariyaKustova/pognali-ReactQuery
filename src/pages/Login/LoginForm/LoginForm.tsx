@@ -1,42 +1,33 @@
-import React, { FC } from "react";
+import { FC } from "react";
 import { useForm, Controller } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
 
 import Button from "../../../components/common/Button/Button";
 import Checkbox from "../../../components/common/Checkbox/Checkbox";
 import { FieldNames } from "./constants";
-import { createController } from "./helpers";
+import { createController, validateValues } from "./helpers";
 import { LoginFormValues } from "./types";
 
 import s from "./LoginForm.module.scss";
 
 interface LoginFormProps {
   onSubmit: (values: LoginFormValues) => void;
-  captcha: string | null;
+  captcha: string | undefined;
 }
-
-const schema = yup
-  .object({
-    login: yup.string().email().required(),
-    password: yup.string().required(),
-  })
-  .required();
 
 const LoginForm: FC<LoginFormProps> = ({ onSubmit, captcha }) => {
   const { control, handleSubmit } = useForm<LoginFormValues>({
     defaultValues: {
-      [FieldNames.LOGIN]: "",
+      [FieldNames.EMAIL]: "",
       [FieldNames.PASSWORD]: "",
       [FieldNames.REMEMBER_ME]: false,
       [FieldNames.CAPTCHA]: "",
     },
-    resolver: yupResolver(schema),
+    resolver: validateValues,
   });
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={s.LoginForm}>
-      {createController(FieldNames.LOGIN, control)}
+      {createController(FieldNames.EMAIL, control)}
       {createController(FieldNames.PASSWORD, control, { type: "password" })}
       <Controller
         name={FieldNames.REMEMBER_ME}

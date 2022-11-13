@@ -1,44 +1,79 @@
-import React, { useCallback } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Navigate } from "react-router-dom";
+import { FC, useCallback, useState } from "react";
+import { QueryClient, useMutation, useQuery } from "react-query";
+import { useNavigate } from "react-router-dom";
 
 import { ROUTE_PATH } from "../../constants";
 import { generateKey } from "../../utils";
-import { AppDispatch, State } from "../../redux/reduxStore";
-import { getIsAuth } from "../../redux/selectors.ts/authSelectors";
-import {
-  getCaptcha,
-  getErrorMessages,
-} from "../../redux/selectors.ts/securitySelectors";
-import { loginUser } from "../../redux/slices/securitySlice";
 import ErrorMessage from "../../components/common/ErrorMessage/ErrorMessage";
 import LoginForm from "./LoginForm/LoginForm";
 import { LoginFormValues } from "./LoginForm/types";
+import { authAPI } from "../../redux/API/auth";
+import { ResponseDataBase, ResponseLogin, ResponseMe } from "./types";
+import { securityAPI } from "../../redux/API/security";
 
-const Login: () => JSX.Element = () => {
-  const isAuth = useSelector((state: State) => getIsAuth(state));
-  const captcha = useSelector((state: State) => getCaptcha(state));
-  const errorMessages = useSelector((state: State) => getErrorMessages(state));
-  const dispatch = useDispatch<AppDispatch>();
+const Login: FC<{refetchAuth: () => void}> = ({refetchAuth}) => {
+  const [error, setError] = useState<Error | null>(null);
+  const navigate = useNavigate();
+
+  const queryClient = new QueryClient();
+
+  const isAuth =
+    !!queryClient.getQueryData<ResponseDataBase<ResponseMe>>("auth")?.data.id;
+
+  const captchaQuery = useQuery<{ url: string }, Error>(
+    ["captcha"],
+    securityAPI.getCaptchaUrl,
+    {
+      enabled: false,
+      onError: (error) => {
+        setError(error);
+      },
+    }
+  );
+
+  const loginMutation = useMutation<
+    ResponseDataBase<ResponseLogin>,
+    Error,
+    LoginFormValues
+  >((values: LoginFormValues) => authAPI.login(values), {
+    onSuccess: (data) => {
+      if (data?.resultCode === 0) {
+        refetchAuth();
+        if (!!queryClient.getQueriesData('captcha')) {
+          captchaQuery.remove();
+        }       
+        navigate(ROUTE_PATH.MAIN);
+      } else {
+        if (data.resultCode === 10) {
+          captchaQuery.refetch();
+        }
+        throw new Error(data?.messages[0]);
+      }
+    },
+    onError: (error) => {
+      setError(error);
+    },
+  });
 
   const onSubmit = useCallback(
     (values: LoginFormValues) => {
-      const { login, password, rememberMe, captcha } = values;
-      dispatch(loginUser({ email: login, password, rememberMe, captcha }));
+      loginMutation.mutate(values);
     },
-    [dispatch]
+    [loginMutation]
   );
 
-  if (isAuth) return <Navigate to={ROUTE_PATH.MAIN} />;
+  if (isAuth) navigate(ROUTE_PATH.MAIN);
 
   return (
     <>
       <h1>Login</h1>
-      {errorMessages &&
-        errorMessages.map((message) => (
-          <ErrorMessage key={generateKey(message)} message={message} />
-        ))}
-      <LoginForm onSubmit={onSubmit} captcha={captcha} />
+      {!!error && (
+        <ErrorMessage
+          key={generateKey(error.message)}
+          message={error.message}
+        />
+      )}
+      <LoginForm onSubmit={onSubmit} captcha={captchaQuery.data?.url} />
     </>
   );
 };

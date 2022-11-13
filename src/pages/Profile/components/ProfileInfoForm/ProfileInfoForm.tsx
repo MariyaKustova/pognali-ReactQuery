@@ -1,19 +1,23 @@
 import React, { FC, useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { useSelector } from "react-redux";
 
-import { ProfileInfoFormProps } from "../../types";
-import { CONTACTS, defaultValues, FieldNames } from "./constants";
+import { ProfileFormValues, ProfileInfoFormProps } from "../../types";
+import { BASE_INFO, CONTACTS, defaultValues, FieldNames } from "./constants";
 import { createController } from "../../../Login/LoginForm/helpers";
 import Button from "../../../../components/common/Button/Button";
 import Checkbox from "../../../../components/common/Checkbox/Checkbox";
 import ErrorMessage from "../../../../components/common/ErrorMessage/ErrorMessage";
-import { generateKey } from "../../../../utils";
-import { validateValues } from "../../helpers";
-import { State } from "../../../../redux/reduxStore";
-import { getErrorMessages } from "../../../../redux/selectors.ts/securitySelectors";
 
 import s from "./ProfileInfoForm.module.scss";
+import { checkCorrectEmail, checkRequired } from "../../helpers";
+
+export const validateValues = (values: ProfileFormValues) => {
+  const errors: Record<string, string> = {};
+  BASE_INFO.forEach((code) => checkRequired(values, errors, code));
+  CONTACTS.forEach((code) => checkCorrectEmail(values.contacts, errors, code));
+  return { values, errors };
+};
+
 
 const ProfileInfoForm: FC<ProfileInfoFormProps> = ({
   aboutMe,
@@ -22,9 +26,8 @@ const ProfileInfoForm: FC<ProfileInfoFormProps> = ({
   fullName,
   contacts,
   onSubmit,
+  errorMessage,
 }) => {
-  const errorMessages = useSelector((state: State) => getErrorMessages(state));
-
   const { control, handleSubmit, reset } = useForm({
     defaultValues,
     resolver: validateValues,
@@ -38,7 +41,7 @@ const ProfileInfoForm: FC<ProfileInfoFormProps> = ({
       fullName,
       contacts,
     });
-  }, []);
+  }, [aboutMe, contacts, fullName, lookingForAJob, lookingForAJobDescription, reset]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={s.ProfileInfoForm}>
@@ -50,10 +53,7 @@ const ProfileInfoForm: FC<ProfileInfoFormProps> = ({
       />
       {createController(FieldNames.LOOKING_FOR_A_JOB_DESCRIPTION, control)}
       {createController(FieldNames.ABOUT_ME, control)}
-      {errorMessages &&
-        errorMessages.map((message) => (
-          <ErrorMessage key={generateKey(message)} message={message} />
-        ))}
+      {errorMessage && <ErrorMessage message={errorMessage} />}
       <div className={s.ProfileInfoForm__contacts}>
         <span>Contacts:</span>
         <div className={s.ProfileInfoForm__contactsWrapper}>

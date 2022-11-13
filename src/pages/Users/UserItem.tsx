@@ -1,29 +1,66 @@
 import React, { FC } from "react";
 import { NavLink } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useMutation, useQueryClient } from "react-query";
 
 import Button from "../../components/common/Button/Button";
 import IconUser from "../../assets/images/user-icon.svg";
 import { ROUTE_PATH } from "../../constants";
 import { User } from "./types";
-import { AppDispatch, State } from "../../redux/reduxStore";
-import { getFollowingInProgress } from "../../redux/selectors.ts/usersSelectors";
-import { follow, unfollow } from "../../redux/slices/usersSlice";
+import { usersAPI } from "../../redux/API/users";
+import { ResponseDataBase } from "../Login/types";
 
 import s from "./UserItem.module.scss";
 
-const UserItem: FC<User> = ({
+interface UserItemProps extends User {
+  queryKey:  (string | number)[],
+  setError: (error: Error) => void, 
+}
+
+const UserItem: FC<UserItemProps> = ({
   id,
   name,
   photos,
   location,
   status,
   followed,
+  queryKey,
+  setError,
 }) => {
-  const followingInProgress = useSelector((state: State) =>
-    getFollowingInProgress(state)
-  );
-  const dispatch = useDispatch<AppDispatch>();
+  const queryClient = useQueryClient();
+
+  const followMutation = useMutation<
+  ResponseDataBase<{}> | undefined,
+  Error,
+  number
+>((userId: number) => usersAPI.follow(userId), {
+    onSuccess: (data, variables) => {
+      if (data?.resultCode === 0) {
+        queryClient.invalidateQueries(queryKey);
+      } else {
+        throw new Error(data?.messages[0]);
+      }
+    },
+    onError: (error) => {
+      setError(error);
+    },
+  });
+
+  const unfollowMutation = useMutation<
+  ResponseDataBase<{}> | undefined,
+  Error,
+  number
+>((userId: number) => usersAPI.unfollow(userId), {
+    onSuccess: (data, variables) => {
+      if (data?.resultCode === 0) {
+        queryClient.invalidateQueries(queryKey);
+      } else {
+        throw new Error(data?.messages[0]);
+      }
+    },
+    onError: (error) => {
+      setError(error);
+    },
+  })
 
   return (
     <div className={s.UserItem}>
@@ -33,27 +70,27 @@ const UserItem: FC<User> = ({
             <img
               className={s.UserItem__Img}
               src={photos.small ?? IconUser}
-              alt="Аватар пользователя"
+              alt="User's avatar"
             />
 
             {followed ? (
               <Button
                 className={s.UserItem__Button}
                 label={"Unfollow"}
-                disabled={followingInProgress.some((userId) => userId === id)}
+                disabled={unfollowMutation.isLoading}
                 onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
                   event.preventDefault();
-                  dispatch(unfollow(id));
+                  unfollowMutation.mutate(id);
                 }}
               />
             ) : (
               <Button
                 className={s.UserItem__Button}
                 label={"Follow"}
-                disabled={followingInProgress.some((userId) => userId === id)}
+                disabled={followMutation.isLoading}
                 onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
                   e.preventDefault();
-                  dispatch(follow(id));
+                  followMutation.mutate(id);
                 }}
               />
             )}
@@ -61,16 +98,16 @@ const UserItem: FC<User> = ({
           <div>
             <h3 className={s.UserItem__Name}>{name}</h3>
             <p className={s.UserItem__Text}>
-              {status ?? "Очень скоро здесь появится статус"}
+              {status ?? "The status will appear here very soon"}
             </p>
           </div>
         </div>
         <div className={s.UserItem__Location}>
           <p className={s.UserItem__Text}>
-            {location?.country ?? "Страна не указана"}
+            {location?.country ?? "Country not specified"}
           </p>
           <p className={s.UserItem__Text}>
-            {location?.city ?? "Город не указан"}
+            {location?.city ?? "The city is not specified"}
           </p>
         </div>
       </NavLink>

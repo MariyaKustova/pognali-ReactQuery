@@ -1,20 +1,31 @@
-import React, { FC } from "react";
+import React, { FC, useCallback, useState } from "react";
 
 import s from "./ErrorModal.module.scss";
 
 interface ErrorModalProps {
-  message: string;
+  message: string | undefined;
+  isOpen: boolean;
   onClick?: () => void;
 }
 
-const ErrorModal: FC<ErrorModalProps> = ({ message, onClick }) => {
+const ErrorModal: FC<ErrorModalProps> = ({ message, isOpen, onClick }) => {
+  const [open, setOpen] = useState<boolean>(isOpen);
+  const hideModal = useCallback(() => {
+    setOpen(false);
+    onClick && onClick();
+  }, [onClick]);
+
   return (
-    <div className={s.ErrorModal} onClick={onClick}>
-      <div className={s.ErrorModal__Modal}>
-        <h1>Error!</h1>
-        <p>{message}</p>
-      </div>
-    </div>
+    <>
+      {open && message ? (
+        <div className={s.ErrorModal} onClick={hideModal}>
+          <div className={s.ErrorModal__Modal}>
+            <h1>Error!</h1>
+            <p>{message}</p>
+          </div>
+        </div>
+      ) : null}
+    </>
   );
 };
 

@@ -28,6 +28,7 @@ export type ProfileFormValues = Omit<UserProfile, "userId" | "photos">;
 
 export interface ProfileInfoFormProps extends UserProfile {
   onSubmit: (values: ProfileFormValues) => void;
+  errorMessage?: string;
 }
 
 export interface Post {

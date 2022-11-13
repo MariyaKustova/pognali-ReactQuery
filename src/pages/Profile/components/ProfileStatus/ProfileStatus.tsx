@@ -1,42 +1,62 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { FC, useCallback, useEffect, useState } from "react";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import classnames from "classnames";
 
-import { AppDispatch, State } from "../../../../redux/reduxStore";
-import { getProfileState } from "../../../../redux/selectors.ts/profileSelectors";
-import { updateUserStatus } from "../../../../redux/slices/profileSlice";
 import BaseInput from "../../../../components/common/BaseInput/BaseInput";
-import { getCurrentUser } from "../../../../redux/selectors.ts/authSelectors";
+import { profileAPI } from "../../../../redux/API/profile";
+import { ResponseDataBase, ResponseMe } from "../../../Login/types";
 
 import s from "./ProfileStatus.module.scss";
 
-const ProfileStatus = () => {
-  const currentUser = useSelector((state: State) => getCurrentUser(state));
-  const { status, userProfile } = useSelector((state: State) =>
-    getProfileState(state)
-  );
-  const dispatch = useDispatch<AppDispatch>();
+interface ProfileStatusProps {
+  userId: number;
+  setError: (error: Error | null) => void;
+}
 
-  const [userStatus, setUserStatus] = useState<string>(status);
+const ProfileStatus: FC<ProfileStatusProps> = ({ userId, setError }) => {
+  const queryClient = useQueryClient();
+
+  const currentUserId =
+    queryClient.getQueryData<ResponseDataBase<ResponseMe>>("auth")?.data.id;
+
+  const isOwner = currentUserId === userId;
+
+  const queryStatus = useQuery<string | undefined, Error>({
+    queryKey: ["status", userId],
+    queryFn: () => profileAPI.getStatus(userId),
+    enabled: !!userId,
+  });
+
+  const mutateStatus = useMutation<
+    ResponseDataBase<{}> | undefined,
+    Error,
+    string
+  >((status: string) => profileAPI.updateStatus(status), {
+    onSuccess: () => queryClient.invalidateQueries(["status", currentUserId]),
+  });
+  const [userStatus, setUserStatus] = useState<string>(queryStatus.status);
   const [editMode, setEditMode] = useState<boolean>(false);
 
-  const isOwner = useMemo(
-    () => userProfile?.userId === currentUser?.userId,
-    [userProfile, currentUser]
-  );
-
   useEffect(() => {
-    setUserStatus(status);
-  }, [status]);
+    if (queryStatus.isError || mutateStatus.isError) {
+      setError(queryStatus.error || mutateStatus.error);
+    }
+  }, [
+    queryStatus.isError,
+    mutateStatus.isError,
+    setError,
+    queryStatus.error,
+    mutateStatus.error,
+  ]);
 
   const onToggleEditMode = useCallback(() => {
     setEditMode((prevState) => !prevState);
   }, []);
 
   const onChangeStatus = useCallback(() => {
-    dispatch(updateUserStatus(userStatus));
+    mutateStatus.mutate(userStatus);
     onToggleEditMode();
-  }, [dispatch, onToggleEditMode, userStatus]);
+  }, [onToggleEditMode, userStatus, mutateStatus]);
 
   return (
     <div
@@ -46,7 +66,7 @@ const ProfileStatus = () => {
     >
       {editMode && isOwner ? (
         <div className={s.ProfileStatus__Modal}>
-          <span className={s.ProfileStatus__Hint}>Введите ваш статус</span>
+          <span className={s.ProfileStatus__Hint}>Input your status</span>
           <BaseInput
             value={userStatus}
             onBlur={onChangeStatus}
@@ -56,7 +76,7 @@ const ProfileStatus = () => {
         </div>
       ) : (
         <div onClick={onToggleEditMode}>
-          {status || "Установите ваш статус"}
+          {queryStatus.data || isOwner ? "Set your status" : ""}
         </div>
       )}
     </div>

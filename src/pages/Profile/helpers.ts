@@ -1,3 +1,4 @@
+import { LoginFormValues } from "./../Login/LoginForm/types";
 import { get } from "lodash";
 
 import IconFB from "../../assets/images/fb-icon.svg";
@@ -10,7 +11,6 @@ import IconWebsite from "../../assets/images/web-icon.svg";
 import IconYoutube from "../../assets/images/youtube-icon.svg";
 import { Contacts, ProfileFormValues } from "./types";
 import { capitalizeFirstLetter } from "../../utils";
-import { BASE_INFO, CONTACTS } from "./components/ProfileInfoForm/constants";
 
 export const getIcon = (key: string) => {
   switch (key) {
@@ -36,8 +36,8 @@ export const getIcon = (key: string) => {
 };
 
 export const checkRequired = (
-  values: ProfileFormValues,
-  errors: {[key: string]: string},
+  values: ProfileFormValues | LoginFormValues,
+  errors: Record<string, string>,
   code: string
 ) => {
   const parameterName = get(values, code);
@@ -49,16 +49,8 @@ export const checkRequired = (
   }
 };
 
-export const checkCorrectEmail = (
-  values: Contacts,
-  errors: {contacts?: {[key: string]: string}},
-  code: string
-) => {
-  const fieldValue = get(values, code);
-
-  const contacts: {[key: string]: string} = {};
-
-  if (
+const isValidEmail = (fieldValue: string) => {
+  return (
     fieldValue &&
     typeof fieldValue === "string" &&
     !String(fieldValue)
@@ -66,15 +58,30 @@ export const checkCorrectEmail = (
       .match(
         /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
       )
-  ) {
+  );
+};
+
+export const checkEmail = (
+  values: LoginFormValues | Contacts,
+  errors: Record<string, string>,
+  code: string
+) => {
+  const fieldValue = get(values, code);
+  if (isValidEmail(fieldValue)) {
+    errors[code] = `${capitalizeFirstLetter(code)} must be a valid email`;
+  }
+};
+
+export const checkCorrectEmail = (
+  values: Contacts,
+  errors: { contacts?: Record<string, string> },
+  code: string
+) => {
+  const fieldValue = get(values, code);
+  const contacts: Record<string, string> = {};
+
+  if (isValidEmail(fieldValue)) {
     contacts[code] = `${capitalizeFirstLetter(code)} must be a valid email`;
     errors.contacts = contacts;
   }
 };
-
-export const validateValues = (values: ProfileFormValues) => {
-  const errors = {};
-  BASE_INFO.forEach((code) => checkRequired(values, errors, code));
-  CONTACTS.forEach((code) => checkCorrectEmail(values.contacts, errors, code));
-  return {values, errors}
-}

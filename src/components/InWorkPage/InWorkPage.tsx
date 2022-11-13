@@ -1,13 +1,12 @@
 import React from "react";
 
-import s from './InWorkPage.module.scss';
+import s from "./InWorkPage.module.scss";
 
 const InWorkPage = () => {
   return (
     <div className={s.InWorkPage}>
       <h1 className={s.InWorkPage__Title}>
-        На данный момент эта страница находится в разработке. Приносим свои
-        извинения!
+        This page is currently under development. We apologize!
       </h1>
     </div>
   );

@@ -7,13 +7,18 @@ import { UserProfile } from "../../types";
 
 import s from "../../Profile.module.scss";
 
-const ProfileInfo: FC<UserProfile> = ({
+interface ProfileInfoProps extends UserProfile {
+  setError: (error: Error | null) => void;
+}
+
+const ProfileInfo: FC<ProfileInfoProps> = ({
   userId,
   aboutMe,
   lookingForAJob,
   lookingForAJobDescription,
   fullName,
   contacts,
+  setError
 }) => {
   return (
     <div className={s.Profile__Wrapper}>
@@ -21,7 +26,7 @@ const ProfileInfo: FC<UserProfile> = ({
         <div className={s.Profile__ShortInfo}>
           <h2>{fullName || "Здесь будет имя пользователя"}</h2>
           <p>id: {userId || "-"}</p>
-          <ProfileStatus />
+          <ProfileStatus setError={setError} userId={userId} />
         </div>
         {lookingForAJob && (
           <div className={s.Profile__Job}>
