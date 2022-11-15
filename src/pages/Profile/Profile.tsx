@@ -24,11 +24,11 @@ const Profile = () => {
   const currentUserId =
     queryClient.getQueryData<ResponseDataBase<ResponseMe>>("auth")?.data.id;
 
-  const userId: string | number | undefined = params.userId || currentUserId;
+  const userId: number | undefined = Number(params.userId) || currentUserId;
 
   const { data: userProfile } = useQuery<UserProfile | undefined, Error>({
     queryKey: ["profile", userId],
-    queryFn: () => profileAPI.getProfile(userId as number),
+    queryFn: () => profileAPI.getProfile(userId),
     enabled: !!userId,
     onError: (err) => {
       setError(error);
